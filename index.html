@@ -72,13 +72,37 @@
             padding: 0.7rem 1.5rem;
             border-radius: 8px;
             text-decoration: none;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .cta-button:hover::before {
+            width: 300px;
+            height: 300px;
         }
 
         .cta-button:hover {
             background: #3A7BC8;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(74,144,226,0.3);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 25px rgba(74,144,226,0.4);
+        }
+
+        .cta-button:active {
+            transform: translateY(-1px) scale(0.98);
         }
 
         /* Hero Section */
@@ -110,16 +134,38 @@
         .hero-cta {
             background: white;
             color: #667eea;
-            padding: 1rem 2rem;
+            padding: 1rem 2.5rem;
             border-radius: 50px;
             text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 5px 20px rgba(255,255,255,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-cta::after {
+            content: '→';
+            position: absolute;
+            right: 20px;
+            opacity: 0;
+            transition: all 0.3s ease;
         }
 
         .hero-cta:hover {
-            transform: scale(1.05);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transform: scale(1.08) translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+            padding-right: 3rem;
+        }
+
+        .hero-cta:hover::after {
+            opacity: 1;
+            right: 25px;
+        }
+
+        .hero-cta:active {
+            transform: scale(1.02) translateY(-1px);
         }
 
         .hero-secondary {
@@ -153,6 +199,16 @@
 
         .stat-item {
             padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-item:hover .stat-number {
+            transform: scale(1.1);
+            color: #667eea;
         }
 
         .stat-number {
@@ -160,6 +216,7 @@
             font-weight: bold;
             color: #4A90E2;
             margin-bottom: 0.5rem;
+            transition: all 0.3s ease;
         }
 
         .stat-label {
@@ -190,12 +247,17 @@
             padding: 2rem;
             border-radius: 12px;
             box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-            transition: all 0.3s;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
         }
 
         .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.2);
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1) rotate(5deg);
         }
 
         .feature-icon {
@@ -208,6 +270,7 @@
             justify-content: center;
             margin-bottom: 1.5rem;
             font-size: 1.5rem;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .feature-card h3 {
@@ -279,12 +342,30 @@
             border-radius: 12px;
             padding: 2rem;
             box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-            transition: all 0.3s;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pricing-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .pricing-card:hover::before {
+            transform: scaleX(1);
         }
 
         .pricing-card:hover {
-            transform: scale(1.05);
-            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            transform: translateY(-8px) scale(1.03);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
         }
 
         .pricing-card.featured {
@@ -1334,11 +1415,10 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="container">
-            <h1>중소기업 인증, AI가 추천하고<br>자동화로 해결합니다</h1>
-            <p>정부·ESG 인증을 3일 만에, 정찰제 가격으로</p>
+            <h1>중소기업 인증 자동화 플랫폼</h1>
+            <p>AI 기반 자동화로 비용 60% 절감, 시간 80% 단축</p>
             <div class="hero-buttons">
-                <a href="#simulator" class="hero-cta">AI 인증 진단 시작하기</a>
-                <a href="#pricing" class="hero-secondary">가격 확인하기</a>
+                <a href="#simulator" class="hero-cta">AI 인증 진단 시작</a>
             </div>
         </div>
     </section>
@@ -1349,19 +1429,15 @@
             <div class="stats-grid">
                 <div class="stat-item">
                     <div class="stat-number">90%</div>
-                    <div class="stat-label">인증 성공률</div>
+                    <div class="stat-label">성공률</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">5일</div>
+                    <div class="stat-label">평균 처리기간</div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-number">60%</div>
                     <div class="stat-label">비용 절감</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">3~7일</div>
-                    <div class="stat-label">처리 기간</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">NPS 72</div>
-                    <div class="stat-label">고객 만족도</div>
                 </div>
             </div>
         </div>
@@ -1370,37 +1446,37 @@
     <!-- Features -->
     <section class="features" id="features">
         <div class="container">
-            <h2 class="section-title">VALUE-UP만의 차별점</h2>
+            <h2 class="section-title">🎯 핵심 기능</h2>
             <div class="features-grid">
                 <div class="feature-card">
                     <div class="feature-icon">🤖</div>
-                    <h3>AI 인증 추천</h3>
-                    <p>10문항 설문으로 귀사에 필요한 인증을 3분 만에 추천합니다. 불필요한 인증으로 인한 시간과 비용 낭비를 방지합니다.</p>
+                    <h3>AI 자격 진단</h3>
+                    <p>10문항 입력만으로 3분 내에 최적의 인증을 AI가 추천합니다. 정확도 85% 이상의 검증된 알고리즘을 사용합니다.</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">💰</div>
-                    <h3>정찰제 가격</h3>
-                    <p>온라인에서 즉시 확인 가능한 투명한 가격. 벤처 290만원, 메인비즈 190만원으로 기존 대비 60% 저렴합니다.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">⚡</div>
-                    <h3>빠른 처리</h3>
-                    <p>AI 자동화로 서류 작성 시간을 90% 단축. 기존 30~60일에서 3~7일로 급한 입찰과 투자에도 대응 가능합니다.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🔄</div>
-                    <h3>End-to-End 서비스</h3>
-                    <p>진단부터 제출, 사후관리까지 한 곳에서 해결. 갱신 알림과 재신청 할인으로 지속적인 인증 관리를 지원합니다.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📊</div>
-                    <h3>90% 자동화</h3>
-                    <p>재무제표와 사업정보 업로드만으로 신청서의 90%가 자동 작성됩니다. 반복 작업을 최소화합니다.</p>
+                    <div class="feature-icon">📄</div>
+                    <h3>서류 자동 생성</h3>
+                    <p>재무제표와 사업정보만 업로드하면 신청서의 90%를 자동으로 작성해드립니다. GPT-4 기반 정확한 문서 생성.</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">👨‍💼</div>
                     <h3>전문가 검수</h3>
-                    <p>경영지도사가 최종 검수하여 높은 성공률 보장. 심사 Q&A까지 대응하여 안심하고 맡기실 수 있습니다.</p>
+                    <p>경영지도사가 직접 검수하여 합격률을 최대화합니다. 심사 Q&A부터 제출 대행까지 전 과정을 지원합니다.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💰</div>
+                    <h3>정찰제 가격</h3>
+                    <p>숨겨진 비용 없이 투명한 가격으로 제공합니다. 기존 컨설팅 대비 평균 60% 비용 절감 효과.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>빠른 처리</h3>
+                    <p>기존 30~60일 → 3~7일로 단축. 급한 입찰이나 투자 유치 일정에 맞춰 신속하게 처리합니다.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔔</div>
+                    <h3>사후관리</h3>
+                    <p>갱신 알림, 재신청 할인, 추가 인증 추천까지. 인증 후에도 지속적으로 관리해드립니다.</p>
                 </div>
             </div>
         </div>
@@ -1433,45 +1509,55 @@
     <!-- Pricing -->
     <section class="pricing" id="pricing">
         <div class="container">
-            <h2 class="section-title">투명한 정찰제 가격</h2>
+            <h2 class="section-title">💳 투명한 정찰제 가격</h2>
+            <p style="text-align: center; color: #666; margin-top: -20px; margin-bottom: 50px; font-size: 1.1rem;">숨겨진 비용 없이, 온라인에서 바로 확인</p>
             <div class="pricing-grid">
                 <div class="pricing-card">
-                    <h3 class="pricing-title">벤처기업</h3>
+                    <h3 class="pricing-title">벤처기업 인증</h3>
                     <div class="pricing-price">290만원</div>
+                    <p style="text-align: center; color: #999; margin-bottom: 20px;">시장가: 500~800만원</p>
                     <ul class="pricing-features">
-                        <li>기존 시장가 500~800만원</li>
-                        <li>처리기간 5~7일</li>
-                        <li>법인세 50% 감면 혜택</li>
+                        <li>법인세 50% 감면</li>
                         <li>정책자금 우대금리</li>
-                        <li>성공률 90%</li>
-                    </ul>
-                    <a href="#" class="cta-button" style="display: block; text-align: center;" onclick="openModal('applyModal'); return false;">신청하기</a>
-                </div>
-                <div class="pricing-card featured">
-                    <div class="featured-badge">인기</div>
-                    <h3 class="pricing-title">이노비즈</h3>
-                    <div class="pricing-price">290만원</div>
-                    <ul class="pricing-features">
-                        <li>기존 시장가 500~800만원</li>
-                        <li>처리기간 5~7일</li>
-                        <li>정책자금 0.5%p 우대</li>
-                        <li>조달 가점 혜택</li>
-                        <li>기술혁신형 인증</li>
+                        <li>조달청 가점 (5점)</li>
+                        <li>스톡옵션 세제혜택</li>
+                        <li>처리기간: 5~7일</li>
                     </ul>
                     <a href="#" class="cta-button" style="display: block; text-align: center;" onclick="openModal('applyModal'); return false;">신청하기</a>
                 </div>
                 <div class="pricing-card">
-                    <h3 class="pricing-title">메인비즈</h3>
-                    <div class="pricing-price">190만원</div>
+                    <h3 class="pricing-title">이노비즈 인증</h3>
+                    <div class="pricing-price">290만원</div>
+                    <p style="text-align: center; color: #999; margin-bottom: 20px;">시장가: 500~800만원</p>
                     <ul class="pricing-features">
-                        <li>기존 시장가 300~500만원</li>
-                        <li>처리기간 3~5일</li>
-                        <li>경영혁신형 인증</li>
-                        <li>정부지원사업 우대</li>
-                        <li>성공률 92%</li>
+                        <li>기술혁신형 중소기업 인정</li>
+                        <li>정책자금 금리 우대</li>
+                        <li>기술보증 우대보증</li>
+                        <li>조달청 가점 (2점)</li>
+                        <li>처리기간: 5~7일</li>
                     </ul>
                     <a href="#" class="cta-button" style="display: block; text-align: center;" onclick="openModal('applyModal'); return false;">신청하기</a>
                 </div>
+                <div class="pricing-card">
+                    <h3 class="pricing-title">메인비즈 인증</h3>
+                    <div class="pricing-price">190만원</div>
+                    <p style="text-align: center; color: #999; margin-bottom: 20px;">시장가: 300~500만원</p>
+                    <ul class="pricing-features">
+                        <li>주력산업 선도기업 인정</li>
+                        <li>정책자금 지원</li>
+                        <li>기술보증 우대</li>
+                        <li>조달청 가점 (1점)</li>
+                        <li>처리기간: 3~5일</li>
+                    </ul>
+                    <a href="#" class="cta-button" style="display: block; text-align: center;" onclick="openModal('applyModal'); return false;">신청하기</a>
+                </div>
+            </div>
+
+            <!-- Special Offers -->
+            <div style="background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%); padding: 40px; border-radius: 20px; margin-top: 60px; text-align: center; box-shadow: 0 10px 40px rgba(255, 165, 0, 0.3);">
+                <h3 style="font-size: 1.8rem; margin-bottom: 20px; color: #333;">🎁 특별 혜택</h3>
+                <p style="font-size: 1.2rem; margin-bottom: 10px; color: #333;"><strong>여성기업인증:</strong> 조건부 무료 (교육 수료 + 마케팅 동의)</p>
+                <p style="font-size: 1.2rem; margin-bottom: 0; color: #333;"><strong>첫 구매 고객 한정</strong> 50% 할인 이벤트 진행 중</p>
             </div>
         </div>
     </section>
@@ -1532,32 +1618,28 @@
             <div class="footer-content">
                 <div class="footer-section">
                     <h4>VALUE-UP AI</h4>
-                    <p>중소기업 인증을 AI로 자동화하여<br>빠르고 정확하게 처리합니다.</p>
-                    <p style="margin-top: 20px;">
-                        <strong>문의:</strong> valueup@ai.com<br>
-                        <strong>웹사이트:</strong> https://value-up.vercel.app
-                    </p>
+                    <p>중소기업 인증 자동화 플랫폼</p>
+                    <p style="margin-top: 10px;">비용 60% 절감, 시간 80% 단축</p>
                 </div>
                 <div class="footer-section">
                     <h4>서비스</h4>
-                    <a href="#simulator">AI 인증 진단</a>
-                    <a href="#pricing">가격 안내</a>
-                    <a href="#process">진행 프로세스</a>
-                    <a href="#features">주요 기능</a>
+                    <a href="#pricing">벤처기업 인증</a>
+                    <a href="#pricing">이노비즈 인증</a>
+                    <a href="#pricing">메인비즈 인증</a>
+                    <a href="#pricing">ISO 인증</a>
                 </div>
                 <div class="footer-section">
-                    <h4>회사</h4>
-                    <a href="#">회사 소개</a>
-                    <a href="#">팀 소개</a>
-                    <a href="#">파트너십</a>
-                    <a href="#" onclick="openModal('consultModal'); return false;">무료 상담</a>
+                    <h4>고객지원</h4>
+                    <a href="#simulator">FAQ</a>
+                    <a href="#process">이용가이드</a>
+                    <a href="#" onclick="openModal('consultModal'); return false;">1:1 상담</a>
+                    <a href="#testimonials">성공사례</a>
                 </div>
                 <div class="footer-section">
-                    <h4>법적 고지</h4>
-                    <a href="#">이용약관</a>
-                    <a href="#">개인정보처리방침</a>
-                    <a href="#">환불 정책</a>
-                    <a href="#">고객센터</a>
+                    <h4>연락처</h4>
+                    <p>📧 valueup@ai.com</p>
+                    <p>🌐 https://value-up.vercel.app</p>
+                    <p>⏰ 평일 9:00-18:00</p>
                 </div>
             </div>
             <div class="footer-bottom">
