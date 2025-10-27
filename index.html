@@ -377,6 +377,195 @@
             margin-top: 5px;
         }
 
+        /* Step-by-step wizard styles */
+        .wizard-container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .wizard-card {
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            min-height: 450px;
+            animation: slideIn 0.4s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .wizard-progress {
+            background: #e0e0e0;
+            height: 8px;
+            border-radius: 4px;
+            margin-bottom: 40px;
+            overflow: hidden;
+        }
+
+        .wizard-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.4s ease;
+            border-radius: 4px;
+        }
+
+        .wizard-step-info {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .wizard-question {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        .wizard-description {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1rem;
+        }
+
+        .wizard-input-group {
+            margin-bottom: 30px;
+        }
+
+        .wizard-input {
+            width: 100%;
+            padding: 18px 24px;
+            font-size: 1.3rem;
+            border: 3px solid #e0e0e0;
+            border-radius: 12px;
+            text-align: center;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .wizard-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 5px rgba(102, 126, 234, 0.1);
+        }
+
+        .wizard-input-unit {
+            display: block;
+            text-align: center;
+            margin-top: 10px;
+            color: #999;
+            font-size: 1rem;
+        }
+
+        .wizard-select {
+            width: 100%;
+            padding: 18px 24px;
+            font-size: 1.2rem;
+            border: 3px solid #e0e0e0;
+            border-radius: 12px;
+            transition: all 0.3s;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .wizard-select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 5px rgba(102, 126, 234, 0.1);
+        }
+
+        .wizard-checkbox-container {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            margin-top: 30px;
+        }
+
+        .wizard-checkbox-option {
+            padding: 30px 40px;
+            border: 3px solid #e0e0e0;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            min-width: 150px;
+        }
+
+        .wizard-checkbox-option:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+
+        .wizard-checkbox-option.selected {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .wizard-checkbox-label {
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+
+        .wizard-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 40px;
+        }
+
+        .wizard-btn {
+            flex: 1;
+            padding: 16px 32px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .wizard-btn-back {
+            background: #f0f0f0;
+            color: #666;
+        }
+
+        .wizard-btn-back:hover {
+            background: #e0e0e0;
+        }
+
+        .wizard-btn-next {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .wizard-btn-next:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .wizard-btn-next:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .wizard-result-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
         .main-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -953,50 +1142,157 @@
 
         // 메인 컴포넌트
         function VentureAnalyzer() {
+            const [step, setStep] = useState(0);
             const [formData, setFormData] = useState({
+                company_name: '',
                 company_age: '',
-                rd_expense: '',
-                revenue: '',
-                has_lab: false,
-                industry: '제조업',
-                region: '서울',
-                company_name: ''
+                rd_expense_million: '', // 백만원 단위
+                revenue_million: '', // 백만원 단위
+                industry: '',
+                region: '',
+                has_lab: null
             });
 
             const [result, setResult] = useState(null);
             const [loading, setLoading] = useState(false);
+            const [showResults, setShowResults] = useState(false);
             const chartRef = useRef(null);
             const chartInstance = useRef(null);
 
-            // 폼 입력 처리
-            const handleInputChange = (e) => {
-                const { name, value, type, checked } = e.target;
+            // 단계 정의
+            const steps = [
+                {
+                    key: 'company_name',
+                    question: '기업명을 입력해주세요',
+                    description: '정확한 분석을 위해 기업명을 알려주세요 (선택사항)',
+                    type: 'text',
+                    placeholder: '예: VALUE-UP AI',
+                    required: false
+                },
+                {
+                    key: 'company_age',
+                    question: '회사를 설립한 지 몇 년이 되었나요?',
+                    description: '설립 후 경과한 연수를 입력해주세요',
+                    type: 'number',
+                    placeholder: '예: 2',
+                    unit: '년',
+                    required: true
+                },
+                {
+                    key: 'rd_expense_million',
+                    question: '직전 4분기 연구개발비는 얼마인가요?',
+                    description: '최근 1년간 R&D에 투자한 총액을 백만원 단위로 입력하세요',
+                    type: 'number',
+                    placeholder: '예: 100',
+                    unit: '백만원',
+                    required: true
+                },
+                {
+                    key: 'revenue_million',
+                    question: '당기 매출액은 얼마인가요?',
+                    description: '올해 매출액을 백만원 단위로 입력하세요',
+                    type: 'number',
+                    placeholder: '예: 500',
+                    unit: '백만원',
+                    required: false
+                },
+                {
+                    key: 'industry',
+                    question: '회사의 주요 업종은 무엇인가요?',
+                    description: '가장 적합한 업종을 선택해주세요',
+                    type: 'select',
+                    options: [
+                        { value: '제조업', label: '제조업' },
+                        { value: 'IT/소프트웨어', label: 'IT/소프트웨어' },
+                        { value: '바이오', label: '바이오/헬스케어' },
+                        { value: '서비스업', label: '서비스업' },
+                        { value: '건설업', label: '건설업' },
+                        { value: '기타', label: '기타' }
+                    ],
+                    required: true
+                },
+                {
+                    key: 'region',
+                    question: '회사의 소재지는 어디인가요?',
+                    description: '본사가 위치한 지역을 선택해주세요',
+                    type: 'select',
+                    options: [
+                        { value: '서울', label: '서울' },
+                        { value: '경기', label: '경기' },
+                        { value: '인천', label: '인천' },
+                        { value: '부산', label: '부산' },
+                        { value: '대구', label: '대구' },
+                        { value: '대전', label: '대전' },
+                        { value: '광주', label: '광주' },
+                        { value: '울산', label: '울산' },
+                        { value: '기타', label: '기타' }
+                    ],
+                    required: true
+                },
+                {
+                    key: 'has_lab',
+                    question: '기업부설연구소를 보유하고 계신가요?',
+                    description: '정부에서 인정한 기업부설연구소 보유 여부',
+                    type: 'boolean',
+                    required: true
+                }
+            ];
+
+            // 현재 단계 유효성 검사
+            const isStepValid = () => {
+                const currentStep = steps[step];
+                const value = formData[currentStep.key];
+
+                if (!currentStep.required) return true;
+                if (currentStep.type === 'boolean') return value !== null;
+                if (currentStep.type === 'select') return value !== '';
+                return value !== '' && value !== null;
+            };
+
+            // 다음 단계로
+            const handleNext = () => {
+                if (step < steps.length - 1) {
+                    setStep(step + 1);
+                } else {
+                    handleSubmit();
+                }
+            };
+
+            // 이전 단계로
+            const handleBack = () => {
+                if (step > 0) {
+                    setStep(step - 1);
+                }
+            };
+
+            // 입력값 변경
+            const handleChange = (key, value) => {
                 setFormData(prev => ({
                     ...prev,
-                    [name]: type === 'checkbox' ? checked : value
+                    [key]: value
                 }));
             };
 
-            // 예측 실행
-            const handlePredict = async () => {
+            // 폼 제출
+            const handleSubmit = () => {
                 setLoading(true);
+                setShowResults(true);
 
-                // 시뮬레이션 (실제로는 API 호출)
                 setTimeout(() => {
                     const mockResult = analyzeCompany(formData);
                     setResult(mockResult);
                     setLoading(false);
-
-                    // 차트 업데이트
                     updateChart(mockResult);
-                }, 1000);
+                }, 1500);
             };
 
-            // 벤처인증 분석 로직
+            // 벤처인증 분석 로직 (백만원 단위로 계산)
             const analyzeCompany = (data) => {
                 const age = parseInt(data.company_age) || 0;
-                const rd = parseInt(data.rd_expense) || 0;
-                const revenue = parseInt(data.revenue) || 0;
+                const rdMillion = parseFloat(data.rd_expense_million) || 0;
+                const revenueMillion = parseFloat(data.revenue_million) || 0;
+                const rd = rdMillion * 1000000; // 백만원 → 원
+                const revenue = revenueMillion * 1000000; // 백만원 → 원
                 const rdRatio = revenue > 0 ? (rd / revenue) * 100 : (rd > 0 ? 100 : 0);
 
                 let score = 0;
@@ -1011,10 +1307,10 @@
                         eligible = true;
                         type = "연구개발기업(창업3년미만)";
                         score = 90;
-                        reasons.push("✅ 창업 3년 미만 + R&D 5천만원 이상");
+                        reasons.push("✅ 창업 3년 미만 + R&D 50백만원 이상");
                     } else {
-                        const need = Math.ceil((50000000 - rd) / 10000000);
-                        recommendations.push(`💡 연구개발비 ${need}천만원 추가 필요`);
+                        const needMillion = Math.ceil((50 - rdMillion));
+                        recommendations.push(`💡 연구개발비 ${needMillion}백만원 추가 필요`);
                     }
                 }
                 // 창업 3년 이상
@@ -1023,12 +1319,13 @@
                         eligible = true;
                         type = "연구개발기업";
                         score = 85;
-                        reasons.push("✅ R&D 5천만원 이상 + 매출대비 5% 이상");
+                        reasons.push("✅ R&D 50백만원 이상 + 매출대비 5% 이상");
                     } else if (rd >= 50000000) {
                         score = 60;
                         recommendations.push(`💡 R&D 비율 ${(5 - rdRatio).toFixed(1)}%p 상향 필요`);
                     } else {
-                        recommendations.push(`💡 연구개발비 증액 필요 (최소 5천만원)`);
+                        const needMillion = Math.ceil(50 - rdMillion);
+                        recommendations.push(`💡 연구개발비 증액 필요 (최소 ${needMillion}백만원 추가)`);
                     }
                 }
 
@@ -1054,7 +1351,9 @@
                     reasons,
                     recommendations,
                     expectedDuration: eligible ? '5-7일' : '10-15일',
-                    expectedCost: '290만원'
+                    expectedCost: '290만원',
+                    rdMillion,
+                    revenueMillion
                 };
             };
 
@@ -1105,155 +1404,91 @@
                 });
             };
 
-            return (
-                <div className="app-container container">
-                    <div style={{textAlign: 'center', color: 'white', marginBottom: '50px'}}>
-                        <h2 style={{fontSize: '2.5rem', marginBottom: '1rem'}}>🚀 AI 벤처기업 인증 예측 시스템</h2>
-                        <p style={{fontSize: '1.1rem', opacity: 0.95}}>공공데이터 567건 학습 | 정확도 96.49% | F1 Score 0.9821</p>
-                    </div>
+            // 단계별 렌더링 함수
+            const renderStep = () => {
+                const currentStep = steps[step];
+                const value = formData[currentStep.key];
 
-                    <div className="app-stats-grid">
-                        <div className="app-stat-card">
-                            <div className="app-stat-number">96.49%</div>
-                            <div className="app-stat-label">예측 정확도</div>
+                // 텍스트/숫자 입력
+                if (currentStep.type === 'text' || currentStep.type === 'number') {
+                    return (
+                        <div className="wizard-input-group">
+                            <input
+                                className="wizard-input"
+                                type={currentStep.type}
+                                value={value}
+                                onChange={(e) => handleChange(currentStep.key, e.target.value)}
+                                placeholder={currentStep.placeholder}
+                                autoFocus
+                            />
+                            {currentStep.unit && (
+                                <span className="wizard-input-unit">{currentStep.unit}</span>
+                            )}
                         </div>
-                        <div className="app-stat-card">
-                            <div className="app-stat-number">90%</div>
-                            <div className="app-stat-label">인증 성공률</div>
-                        </div>
-                        <div className="app-stat-card">
-                            <div className="app-stat-number">5-7일</div>
-                            <div className="app-stat-label">평균 처리기간</div>
-                        </div>
-                        <div className="app-stat-card">
-                            <div className="app-stat-number">290만원</div>
-                            <div className="app-stat-label">서비스 비용</div>
-                        </div>
-                    </div>
+                    );
+                }
 
-                    <div className="main-grid">
-                        <div className="card">
-                            <h2 className="card-title">
-                                <span>📝</span> 기업 정보 입력
-                            </h2>
-
-                            <div className="form-group">
-                                <label>기업명 (선택)</label>
-                                <input
-                                    type="text"
-                                    name="company_name"
-                                    value={formData.company_name}
-                                    onChange={handleInputChange}
-                                    placeholder="예: VALUE-UP AI"
-                                />
-                            </div>
-
-                            <div className="form-group">
-                                <label>설립 연도 (업력)</label>
-                                <div className="input-with-unit">
-                                    <input
-                                        type="number"
-                                        name="company_age"
-                                        value={formData.company_age}
-                                        onChange={handleInputChange}
-                                        placeholder="예: 2"
-                                    />
-                                    <span className="unit">년</span>
-                                </div>
-                            </div>
-
-                            <div className="form-group">
-                                <label>직전 4분기 연구개발비 합계</label>
-                                <div className="input-with-unit">
-                                    <input
-                                        type="number"
-                                        name="rd_expense"
-                                        value={formData.rd_expense}
-                                        onChange={handleInputChange}
-                                        placeholder="예: 100000000"
-                                    />
-                                    <span className="unit">원</span>
-                                </div>
-                            </div>
-
-                            <div className="form-group">
-                                <label>당기 매출액</label>
-                                <div className="input-with-unit">
-                                    <input
-                                        type="number"
-                                        name="revenue"
-                                        value={formData.revenue}
-                                        onChange={handleInputChange}
-                                        placeholder="예: 500000000"
-                                    />
-                                    <span className="unit">원</span>
-                                </div>
-                            </div>
-
-                            <div className="form-group">
-                                <label>업종</label>
-                                <select
-                                    name="industry"
-                                    value={formData.industry}
-                                    onChange={handleInputChange}
-                                >
-                                    <option value="제조업">제조업</option>
-                                    <option value="IT/소프트웨어">IT/소프트웨어</option>
-                                    <option value="바이오">바이오/헬스케어</option>
-                                    <option value="서비스업">서비스업</option>
-                                    <option value="건설업">건설업</option>
-                                    <option value="기타">기타</option>
-                                </select>
-                            </div>
-
-                            <div className="form-group">
-                                <label>소재지</label>
-                                <select
-                                    name="region"
-                                    value={formData.region}
-                                    onChange={handleInputChange}
-                                >
-                                    <option value="서울">서울</option>
-                                    <option value="경기">경기</option>
-                                    <option value="인천">인천</option>
-                                    <option value="부산">부산</option>
-                                    <option value="대구">대구</option>
-                                    <option value="대전">대전</option>
-                                    <option value="광주">광주</option>
-                                    <option value="울산">울산</option>
-                                    <option value="기타">기타</option>
-                                </select>
-                            </div>
-
-                            <div className="checkbox-group">
-                                <input
-                                    type="checkbox"
-                                    id="has_lab"
-                                    name="has_lab"
-                                    checked={formData.has_lab}
-                                    onChange={handleInputChange}
-                                />
-                                <label htmlFor="has_lab">기업부설연구소 보유</label>
-                            </div>
-
-                            <button
-                                className="btn btn-primary"
-                                onClick={handlePredict}
-                                disabled={loading || !formData.company_age || !formData.rd_expense}
+                // 선택
+                if (currentStep.type === 'select') {
+                    return (
+                        <div className="wizard-input-group">
+                            <select
+                                className="wizard-select"
+                                value={value}
+                                onChange={(e) => handleChange(currentStep.key, e.target.value)}
+                                autoFocus
                             >
-                                {loading ? '분석 중...' : '벤처인증 가능성 예측'}
-                            </button>
+                                <option value="">선택해주세요</option>
+                                {currentStep.options.map(opt => (
+                                    <option key={opt.value} value={opt.value}>
+                                        {opt.label}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                    );
+                }
+
+                // 예/아니오
+                if (currentStep.type === 'boolean') {
+                    return (
+                        <div className="wizard-checkbox-container">
+                            <div
+                                className={`wizard-checkbox-option ${value === true ? 'selected' : ''}`}
+                                onClick={() => handleChange(currentStep.key, true)}
+                            >
+                                <div className="wizard-checkbox-label">✅ 예</div>
+                            </div>
+                            <div
+                                className={`wizard-checkbox-option ${value === false ? 'selected' : ''}`}
+                                onClick={() => handleChange(currentStep.key, false)}
+                            >
+                                <div className="wizard-checkbox-label">❌ 아니오</div>
+                            </div>
+                        </div>
+                    );
+                }
+            };
+
+            // 결과 화면
+            if (showResults) {
+                return (
+                    <div className="wizard-result-container container">
+                        <div style={{textAlign: 'center', color: 'white', marginBottom: '40px'}}>
+                            <h2 style={{fontSize: '2.5rem', marginBottom: '1rem'}}>📊 분석 결과</h2>
+                            <p style={{fontSize: '1.1rem', opacity: 0.95}}>AI가 귀사의 벤처인증 가능성을 분석했습니다</p>
                         </div>
 
-                        <div className="card">
-                            <h2 className="card-title">
-                                <span>📊</span> 예측 결과
-                            </h2>
-
-                            {loading && <div className="loader"></div>}
-
-                            {result && !loading && (
-                                <div className="result-section">
+                        {loading ? (
+                            <div className="wizard-card">
+                                <div className="loader"></div>
+                                <p style={{textAlign: 'center', marginTop: '20px', color: '#666'}}>
+                                    데이터를 분석하고 있습니다...
+                                </p>
+                            </div>
+                        ) : result && (
+                            <div className="main-grid">
+                                <div className="card">
                                     <div className={`result-badge ${result.eligible ? 'success' : result.score > 50 ? 'warning' : 'danger'}`}>
                                         {result.eligible ? '✅ 인증 가능' : result.score > 50 ? '⚠️ 조건부 가능' : '❌ 보완 필요'}
                                     </div>
@@ -1322,13 +1557,98 @@
                                         <canvas ref={chartRef}></canvas>
                                     </div>
                                 </div>
-                            )}
 
-                            {!result && !loading && (
-                                <div className="alert alert-info">
-                                    기업 정보를 입력하고 예측 버튼을 클릭하세요.
+                                <div className="card">
+                                    <h2 className="card-title">
+                                        <span>📋</span> 입력하신 정보
+                                    </h2>
+                                    <div style={{background: '#f8f9fa', padding: '20px', borderRadius: '10px'}}>
+                                        <p><strong>기업명:</strong> {formData.company_name || '미입력'}</p>
+                                        <p><strong>업력:</strong> {formData.company_age}년</p>
+                                        <p><strong>R&D 투자:</strong> {formData.rd_expense_million}백만원</p>
+                                        <p><strong>매출액:</strong> {formData.revenue_million || '미입력'}백만원</p>
+                                        <p><strong>업종:</strong> {formData.industry}</p>
+                                        <p><strong>소재지:</strong> {formData.region}</p>
+                                        <p><strong>기업부설연구소:</strong> {formData.has_lab ? '보유' : '미보유'}</p>
+                                    </div>
+                                    <button
+                                        className="btn btn-primary"
+                                        onClick={() => {
+                                            setShowResults(false);
+                                            setStep(0);
+                                            setResult(null);
+                                        }}
+                                        style={{marginTop: '20px'}}
+                                    >
+                                        🔄 다시 진단하기
+                                    </button>
                                 </div>
-                            )}
+                            </div>
+                        )}
+                    </div>
+                );
+            }
+
+            // 위자드 화면
+            const currentStep = steps[step];
+            const progress = ((step + 1) / steps.length) * 100;
+
+            return (
+                <div className="app-container container">
+                    <div style={{textAlign: 'center', color: 'white', marginBottom: '50px'}}>
+                        <h2 style={{fontSize: '2.5rem', marginBottom: '1rem'}}>🚀 AI 벤처기업 인증 예측 시스템</h2>
+                        <p style={{fontSize: '1.1rem', opacity: 0.95}}>공공데이터 567건 학습 | 정확도 96.49% | F1 Score 0.9821</p>
+                    </div>
+
+                    <div className="app-stats-grid">
+                        <div className="app-stat-card">
+                            <div className="app-stat-number">96.49%</div>
+                            <div className="app-stat-label">예측 정확도</div>
+                        </div>
+                        <div className="app-stat-card">
+                            <div className="app-stat-number">90%</div>
+                            <div className="app-stat-label">인증 성공률</div>
+                        </div>
+                        <div className="app-stat-card">
+                            <div className="app-stat-number">5-7일</div>
+                            <div className="app-stat-label">평균 처리기간</div>
+                        </div>
+                        <div className="app-stat-card">
+                            <div className="app-stat-number">290만원</div>
+                            <div className="app-stat-label">서비스 비용</div>
+                        </div>
+                    </div>
+
+                    <div className="wizard-container">
+                        <div className="wizard-card">
+                            <div className="wizard-progress">
+                                <div className="wizard-progress-bar" style={{width: `${progress}%`}}></div>
+                            </div>
+
+                            <div className="wizard-step-info">
+                                질문 {step + 1} / {steps.length}
+                            </div>
+
+                            <h2 className="wizard-question">{currentStep.question}</h2>
+                            <p className="wizard-description">{currentStep.description}</p>
+
+                            {renderStep()}
+
+                            <div className="wizard-buttons">
+                                {step > 0 && (
+                                    <button className="wizard-btn wizard-btn-back" onClick={handleBack}>
+                                        ← 이전
+                                    </button>
+                                )}
+                                <button
+                                    className="wizard-btn wizard-btn-next"
+                                    onClick={handleNext}
+                                    disabled={!isStepValid()}
+                                    style={step === 0 ? {flex: 1} : {}}
+                                >
+                                    {step < steps.length - 1 ? '다음 →' : '🎯 결과 확인'}
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
