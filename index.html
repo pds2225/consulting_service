@@ -990,6 +990,277 @@
             opacity: 1;
         }
 
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            animation: slideUp 0.3s ease;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-close {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            font-size: 2rem;
+            color: #999;
+            cursor: pointer;
+            background: none;
+            border: none;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+
+        .modal-close:hover {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .modal-title {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .modal-description {
+            color: #666;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 600px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .modal-form .form-group {
+            margin-bottom: 20px;
+        }
+
+        .modal-form label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .modal-form input,
+        .modal-form select,
+        .modal-form textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        .modal-form input:focus,
+        .modal-form select:focus,
+        .modal-form textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .modal-form textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .modal-form .btn-submit {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .modal-form .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Mobile Navigation */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #333;
+        }
+
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 80%;
+            max-width: 300px;
+            height: 100vh;
+            background: white;
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+            transition: right 0.3s ease;
+            z-index: 999;
+            padding: 80px 20px 20px;
+        }
+
+        .mobile-nav.active {
+            right: 0;
+        }
+
+        .mobile-nav-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 998;
+        }
+
+        .mobile-nav-overlay.active {
+            display: block;
+        }
+
+        .mobile-nav ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .mobile-nav li {
+            margin-bottom: 20px;
+        }
+
+        .mobile-nav a {
+            display: block;
+            padding: 12px 20px;
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .mobile-nav a:hover {
+            background: #f0f0f0;
+            color: #4A90E2;
+        }
+
+        .mobile-nav .cta-button {
+            display: block;
+            margin-top: 20px;
+        }
+
+        /* Enhanced Footer */
+        .footer-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+            text-align: left;
+        }
+
+        .footer-section h4 {
+            color: white;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        .footer-section p,
+        .footer-section a {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.8;
+            font-size: 0.95rem;
+        }
+
+        .footer-section a {
+            display: block;
+            margin-bottom: 10px;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding-top: 30px;
+            text-align: center;
+        }
+
+        .footer-bottom p {
+            color: rgba(255, 255, 255, 0.7);
+            margin: 5px 0;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .hero h1 {
@@ -1009,8 +1280,25 @@
                 display: none;
             }
 
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .mobile-nav {
+                display: block;
+            }
+
             .testimonial-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .modal-content {
+                padding: 30px 20px;
             }
         }
     </style>
@@ -1026,9 +1314,22 @@
                 <li><a href="#pricing">가격</a></li>
                 <li><a href="#simulator">AI 진단</a></li>
             </ul>
-            <a href="#simulator" class="cta-button">무료 상담 신청</a>
+            <a href="#" class="cta-button" onclick="openModal('consultModal'); return false;">무료 상담 신청</a>
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
         </nav>
     </header>
+
+    <!-- Mobile Navigation -->
+    <div class="mobile-nav-overlay" onclick="toggleMobileMenu()"></div>
+    <div class="mobile-nav">
+        <ul>
+            <li><a href="#features" onclick="toggleMobileMenu()">주요 기능</a></li>
+            <li><a href="#process" onclick="toggleMobileMenu()">프로세스</a></li>
+            <li><a href="#pricing" onclick="toggleMobileMenu()">가격</a></li>
+            <li><a href="#simulator" onclick="toggleMobileMenu()">AI 진단</a></li>
+        </ul>
+        <a href="#" class="cta-button" onclick="openModal('consultModal'); toggleMobileMenu(); return false;">무료 상담 신청</a>
+    </div>
 
     <!-- Hero Section -->
     <section class="hero">
@@ -1144,7 +1445,7 @@
                         <li>정책자금 우대금리</li>
                         <li>성공률 90%</li>
                     </ul>
-                    <a href="#simulator" class="cta-button" style="display: block; text-align: center;">신청하기</a>
+                    <a href="#" class="cta-button" style="display: block; text-align: center;" onclick="openModal('applyModal'); return false;">신청하기</a>
                 </div>
                 <div class="pricing-card featured">
                     <div class="featured-badge">인기</div>
@@ -1157,7 +1458,7 @@
                         <li>조달 가점 혜택</li>
                         <li>기술혁신형 인증</li>
                     </ul>
-                    <a href="#simulator" class="cta-button" style="display: block; text-align: center;">신청하기</a>
+                    <a href="#" class="cta-button" style="display: block; text-align: center;" onclick="openModal('applyModal'); return false;">신청하기</a>
                 </div>
                 <div class="pricing-card">
                     <h3 class="pricing-title">메인비즈</h3>
@@ -1169,7 +1470,7 @@
                         <li>정부지원사업 우대</li>
                         <li>성공률 92%</li>
                     </ul>
-                    <a href="#simulator" class="cta-button" style="display: block; text-align: center;">신청하기</a>
+                    <a href="#" class="cta-button" style="display: block; text-align: center;" onclick="openModal('applyModal'); return false;">신청하기</a>
                 </div>
             </div>
         </div>
@@ -1228,16 +1529,155 @@
     <!-- Footer -->
     <footer>
         <div class="container">
-            <div class="footer-links">
-                <a href="#">회사소개</a>
-                <a href="#">이용약관</a>
-                <a href="#">개인정보처리방침</a>
-                <a href="#">고객센터</a>
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>VALUE-UP AI</h4>
+                    <p>중소기업 인증을 AI로 자동화하여<br>빠르고 정확하게 처리합니다.</p>
+                    <p style="margin-top: 20px;">
+                        <strong>문의:</strong> valueup@ai.com<br>
+                        <strong>웹사이트:</strong> https://value-up.vercel.app
+                    </p>
+                </div>
+                <div class="footer-section">
+                    <h4>서비스</h4>
+                    <a href="#simulator">AI 인증 진단</a>
+                    <a href="#pricing">가격 안내</a>
+                    <a href="#process">진행 프로세스</a>
+                    <a href="#features">주요 기능</a>
+                </div>
+                <div class="footer-section">
+                    <h4>회사</h4>
+                    <a href="#">회사 소개</a>
+                    <a href="#">팀 소개</a>
+                    <a href="#">파트너십</a>
+                    <a href="#" onclick="openModal('consultModal'); return false;">무료 상담</a>
+                </div>
+                <div class="footer-section">
+                    <h4>법적 고지</h4>
+                    <a href="#">이용약관</a>
+                    <a href="#">개인정보처리방침</a>
+                    <a href="#">환불 정책</a>
+                    <a href="#">고객센터</a>
+                </div>
             </div>
-            <p>&copy; 2025 VALUE-UP AI. All rights reserved.</p>
-            <p>문의: valueup@ai.com | https://value-up.vercel.app</p>
+            <div class="footer-bottom">
+                <p>&copy; 2025 VALUE-UP AI. All rights reserved.</p>
+            </div>
         </div>
     </footer>
+
+    <!-- Consultation Modal -->
+    <div id="consultModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('consultModal')">&times;</button>
+            <h2 class="modal-title">무료 상담 신청</h2>
+            <p class="modal-description">
+                벤처인증 전문가가 귀사의 상황을 분석하고 최적의 인증 전략을 제공해 드립니다.
+            </p>
+            <form class="modal-form" onsubmit="handleConsultSubmit(event)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>이름 *</label>
+                        <input type="text" name="name" required placeholder="홍길동">
+                    </div>
+                    <div class="form-group">
+                        <label>회사명 *</label>
+                        <input type="text" name="company" required placeholder="VALUE-UP">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>연락처 *</label>
+                        <input type="tel" name="phone" required placeholder="010-1234-5678">
+                    </div>
+                    <div class="form-group">
+                        <label>이메일 *</label>
+                        <input type="email" name="email" required placeholder="example@company.com">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>희망 인증 *</label>
+                    <select name="certification" required>
+                        <option value="">선택해주세요</option>
+                        <option value="벤처기업">벤처기업 인증</option>
+                        <option value="이노비즈">이노비즈 인증</option>
+                        <option value="메인비즈">메인비즈 인증</option>
+                        <option value="기타">기타/상담 필요</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>상담 내용</label>
+                    <textarea name="message" placeholder="문의하실 내용을 자유롭게 작성해주세요."></textarea>
+                </div>
+                <button type="submit" class="btn-submit">상담 신청하기</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Application Modal -->
+    <div id="applyModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('applyModal')">&times;</button>
+            <h2 class="modal-title">인증 신청하기</h2>
+            <p class="modal-description">
+                선택하신 인증 서비스에 대한 정보를 입력해주시면, 담당자가 빠르게 연락드리겠습니다.
+            </p>
+            <form class="modal-form" onsubmit="handleApplySubmit(event)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>대표자명 *</label>
+                        <input type="text" name="ceo" required placeholder="홍길동">
+                    </div>
+                    <div class="form-group">
+                        <label>회사명 *</label>
+                        <input type="text" name="company" required placeholder="VALUE-UP">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>연락처 *</label>
+                        <input type="tel" name="phone" required placeholder="010-1234-5678">
+                    </div>
+                    <div class="form-group">
+                        <label>이메일 *</label>
+                        <input type="email" name="email" required placeholder="example@company.com">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>설립연도 *</label>
+                        <input type="number" name="foundedYear" required placeholder="2020" min="1900" max="2025">
+                    </div>
+                    <div class="form-group">
+                        <label>업종 *</label>
+                        <select name="industry" required>
+                            <option value="">선택해주세요</option>
+                            <option value="제조업">제조업</option>
+                            <option value="IT/소프트웨어">IT/소프트웨어</option>
+                            <option value="바이오">바이오/헬스케어</option>
+                            <option value="서비스업">서비스업</option>
+                            <option value="건설업">건설업</option>
+                            <option value="기타">기타</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>신청 인증 유형 *</label>
+                    <select name="certificationType" required>
+                        <option value="">선택해주세요</option>
+                        <option value="벤처기업">벤처기업 인증 (290만원)</option>
+                        <option value="이노비즈">이노비즈 인증 (290만원)</option>
+                        <option value="메인비즈">메인비즈 인증 (190만원)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>특이사항</label>
+                    <textarea name="notes" placeholder="급한 일정, 특별한 요구사항 등을 알려주세요."></textarea>
+                </div>
+                <button type="submit" class="btn-submit">신청하기</button>
+            </form>
+        </div>
+    </div>
 
     <script type="text/babel">
         const { useState, useRef } = React;
@@ -1434,9 +1874,7 @@ ${result.recommendations.map(r => r.replace('💡 ', '')).join('\n')}
 
             // 전문가 상담 신청
             const handleConsultation = () => {
-                alert('전문가 상담 신청 페이지로 이동합니다.\n\n실제 서비스에서는 상담 신청 폼이나 연락처 페이지로 연결됩니다.');
-                // 실제로는 상담 페이지나 이메일 폼으로 이동
-                // window.location.href = '/consultation';
+                openModal('consultModal');
             };
 
             // 벤처인증 분석 로직 (백만원 단위로 계산)
@@ -1849,6 +2287,87 @@ ${result.recommendations.map(r => r.replace('💡 ', '')).join('\n')}
                     });
                 }
             });
+        });
+    </script>
+
+    <script>
+        // Modal functions
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }
+
+        // Close modal when clicking outside
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeModal(this.id);
+                }
+            });
+        });
+
+        // Mobile menu functions
+        function toggleMobileMenu() {
+            const mobileNav = document.querySelector('.mobile-nav');
+            const overlay = document.querySelector('.mobile-nav-overlay');
+
+            if (mobileNav && overlay) {
+                mobileNav.classList.toggle('active');
+                overlay.classList.toggle('active');
+                document.body.style.overflow = mobileNav.classList.contains('active') ? 'hidden' : '';
+            }
+        }
+
+        // Form submission handlers
+        function handleConsultSubmit(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData);
+
+            console.log('상담 신청 데이터:', data);
+
+            // 실제 서비스에서는 여기서 API 호출
+            alert(`상담 신청이 접수되었습니다!\n\n담당자가 빠른 시일 내에 ${data.phone}로 연락드리겠습니다.\n감사합니다.`);
+
+            closeModal('consultModal');
+            e.target.reset();
+        }
+
+        function handleApplySubmit(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData);
+
+            console.log('인증 신청 데이터:', data);
+
+            // 실제 서비스에서는 여기서 API 호출
+            alert(`인증 신청이 접수되었습니다!\n\n신청 내용:\n- 회사: ${data.company}\n- 인증 유형: ${data.certificationType}\n\n담당자가 영업일 기준 1일 이내에 연락드리겠습니다.\n감사합니다.`);
+
+            closeModal('applyModal');
+            e.target.reset();
+        }
+
+        // ESC key to close modals
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.modal.active').forEach(modal => {
+                    closeModal(modal.id);
+                });
+                if (document.querySelector('.mobile-nav.active')) {
+                    toggleMobileMenu();
+                }
+            }
         });
     </script>
 </body>
