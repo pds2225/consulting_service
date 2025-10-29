@@ -81,83 +81,115 @@
             box-shadow: 0 5px 15px rgba(74,144,226,0.3);
         }
 
-        /* Hero Section */
-        .hero {
-            padding: 80px 0;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+        /* ===== 히어로 섹션 (NEW DESIGN based on image_231b21.jpg - Clear Parts Only) ===== */
+        .hero.new-hero-design {
+            margin-top: 0; /* Adjust for fixed header */
+            /* 이미지와 유사한 그라데이션 (상단 연함 -> 하단 진함) */
+            background: linear-gradient(180deg, #A8B2FF 0%, #667EEA 100%);
+            padding: 80px 30px 100px; /* 패딩 조정 */
             text-align: center;
+            position: relative;
+            overflow: hidden;
+            color: white; /* 기본 텍스트 색상 흰색 */
         }
 
-        .hero h1 {
-            font-size: 2.8rem;
-            margin-bottom: 1rem;
-            font-weight: 700;
+        .hero.new-hero-design .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 700px; /* 콘텐츠 최대 너비 조정 */
+            margin: 0 auto;
         }
 
-        .hero p {
-            font-size: 1.3rem;
-            margin-bottom: 2rem;
-            opacity: 0.95;
-        }
-
-        .hero-buttons {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-        }
-
-        .hero-cta {
-            background: white;
-            color: #667eea;
-            padding: 1rem 2rem;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-
-        .hero-cta:hover {
-            transform: scale(1.05);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
-
-        .hero-buttons-wrapper {
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-            gap: 20px;
-            animation: fadeInUp 0.8s ease 0.4s backwards;
-        }
-
-        @media (max-width: 768px) {
-            .hero-buttons-wrapper {
-                flex-direction: column;
-                gap: 10px;
-                align-items: center;
-            }
-
-            .hero-cta {
-                width: 80%;
-                max-width: 350px;
-            }
-        }
-
-        .hero-secondary {
-            background: transparent;
+        /* 새 제목 스타일 (이미지와 유사하게 크기/굵기 조정) */
+        .hero.new-hero-design h1 {
+            font-size: 40px; /* 이미지와 유사한 크기 */
+            font-weight: 700; /* 굵게 (Pretendard 폰트 기준) */
             color: white;
-            border: 2px solid white;
-            padding: 1rem 2rem;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s;
+            margin-bottom: 20px;
+            line-height: 1.3;
         }
 
-        .hero-secondary:hover {
-            background: white;
-            color: #667eea;
+        /* 새 부제목 스타일 */
+        .hero.new-hero-design .subtitle {
+            font-size: 16px; /* 이미지와 유사한 크기 */
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 35px;
+            font-weight: 400; /* 일반 굵기 */
+            line-height: 1.6;
         }
+
+        /* 새 버튼 스타일 (이미지의 연보라 배경, 어두운 글씨) */
+        .hero.new-hero-design .new-hero-cta {
+            background: #A8B2FF; /* 이미지의 연보라 배경 */
+            color: #374151; /* 이미지의 어두운 글씨 (다크 그레이) */
+            padding: 15px 35px; /* 패딩 조정 */
+            border-radius: 10px; /* 약간 각진 모서리 */
+            text-decoration: none;
+            font-weight: 600; /* 약간 굵게 */
+            font-size: 16px; /* 글자 크기 조정 */
+            display: inline-flex;
+            align-items: center;
+            gap: 8px; /* 아이콘과 텍스트 간격 */
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 15px rgba(168, 178, 255, 0.3); /* 연보라 그림자 */
+            border: none;
+        }
+
+        .hero.new-hero-design .new-hero-cta .btn-icon {
+            font-size: 18px; /* 아이콘 크기 */
+        }
+
+
+        .hero.new-hero-design .new-hero-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(168, 178, 255, 0.4);
+            background: #BCC5FF; /* 호버 시 약간 밝게 */
+        }
+
+        /* 버튼 아래 작은 텍스트 */
+        .hero.new-hero-design .bottom-text {
+            margin-top: 15px;
+            font-size: 13px; /* 이미지와 유사한 크기 */
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* 장식 요소 CSS는 제외 */
+
+        /* 모바일 반응형 */
+        @media (max-width: 768px) {
+            .hero.new-hero-design {
+                padding: 60px 20px 80px;
+            }
+            .hero.new-hero-design h1 {
+                font-size: 28px; /* 모바일 크기 조정 */
+            }
+            .hero.new-hero-design .subtitle {
+                font-size: 14px;
+            }
+            .hero.new-hero-design .new-hero-cta {
+                padding: 12px 25px;
+                font-size: 15px;
+            }
+            .hero.new-hero-design .bottom-text {
+                font-size: 12px;
+            }
+        }
+
+        /* 애니메이션 (기존 fadeInUp 유지) */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* 새 요소에 애니메이션 적용 */
+        .hero.new-hero-design h1,
+        .hero.new-hero-design .subtitle,
+        .hero.new-hero-design .new-hero-cta,
+        .hero.new-hero-design .bottom-text {
+            animation: fadeInUp 0.8s ease backwards;
+        }
+        .hero.new-hero-design .subtitle { animation-delay: 0.2s; }
+        .hero.new-hero-design .new-hero-cta { animation-delay: 0.4s; }
+        .hero.new-hero-design .bottom-text { animation-delay: 0.5s; }
 
         /* Stats */
         .stats {
@@ -1389,16 +1421,23 @@
         </nav>
     </header>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="container">
-            <h1>중소기업 인증, AI가 추천하고<br>자동화로 해결합니다</h1>
-            <p>정부·ESG 인증을 3일 만에, 정찰제 가격으로</p>
-            <div class="hero-buttons-wrapper">
-                <a href="#ai" class="hero-cta">🔮 무료 진단</a>
-                <a href="#consult" class="hero-cta">💬 상담 신청</a>
-            </div>
+    <!-- ===== 히어로 섹션 (NEW DESIGN based on image_231b21.jpg - Clear Parts Only) ===== -->
+    <section class="hero new-hero-design">
+        <div class="hero-content">
+            <!-- 큰 제목 -->
+            <h1>중소기업 인증, 전문가가 확실하게 끝냅니다</h1>
+            <!-- 부제목 -->
+            <p class="subtitle">
+                맞춤 진단부터 서류 작성, 심사 대응까지 — VALUE-UP 컨설턴트가 전담 관리합니다.
+            </p>
+            <!-- 버튼 -->
+            <a href="#ai" class="hero-cta new-hero-cta">
+                 <span class="btn-icon">🔮</span> 무료 AI 진단 시작하기
+            </a>
+            <!-- 하단 작은 텍스트 -->
+            <p class="bottom-text">3분 안에 맞춤 인증 추천 받기</p>
         </div>
+        <!-- 장식 요소는 제외 -->
     </section>
 
     <!-- Stats -->
