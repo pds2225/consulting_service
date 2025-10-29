@@ -1185,9 +1185,75 @@
                 font-size: 1rem;
             }
         }
+
+        /* Success Notification Banner */
+        .notification-banner {
+            position: fixed;
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            padding: 15px 25px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 10000;
+            transition: all 0.5s ease;
+            max-width: 90%;
+            width: auto;
+        }
+
+        .notification-banner.show {
+            top: 20px;
+        }
+
+        .notification-icon {
+            width: 32px;
+            height: 32px;
+            background: #48bb78;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .notification-text {
+            color: #333;
+            font-size: 0.95rem;
+            font-weight: 500;
+            line-height: 1.4;
+        }
+
+        @media (max-width: 480px) {
+            .notification-banner {
+                padding: 12px 20px;
+            }
+
+            .notification-icon {
+                width: 28px;
+                height: 28px;
+                font-size: 16px;
+            }
+
+            .notification-text {
+                font-size: 0.85rem;
+            }
+        }
     </style>
 </head>
 <body>
+    <!-- Success Notification Banner -->
+    <div class="notification-banner" id="notificationBanner">
+        <div class="notification-icon">✓</div>
+        <div class="notification-text" id="notificationText"></div>
+    </div>
+
     <!-- Coupon Popup -->
     <div class="popup-overlay" id="couponPopup">
         <div class="popup-content">
@@ -2121,6 +2187,53 @@ ${result.recommendations.map(r => r.replace('💡 ', '')).join('\n')}
             if (shouldShowPopup()) {
                 showPopup();
             }
+        })();
+
+        // Success Notification Banner Logic
+        (function() {
+            const banner = document.getElementById('notificationBanner');
+            const textElement = document.getElementById('notificationText');
+
+            // 회사명 예시 목록
+            const companies = [
+                '인천 OO회사',
+                '서울 △△기업',
+                '부산 ◇◇상사',
+                '대전 □□테크',
+                '경기 ☆☆산업',
+                '광주 ◆◆제조',
+                '대구 ■■솔루션',
+                '울산 ▲▲엔지니어링',
+                '수원 ●●시스템',
+                '성남 ★★개발'
+            ];
+
+            // 무작위 회사명 선택
+            function getRandomCompany() {
+                return companies[Math.floor(Math.random() * companies.length)];
+            }
+
+            // 알림 표시
+            function showNotification() {
+                const company = getRandomCompany();
+                textElement.textContent = `${company}가 벤처인증 20만원 할인을 받았습니다`;
+                banner.classList.add('show');
+
+                // 3초 후 사라짐
+                setTimeout(() => {
+                    banner.classList.remove('show');
+                }, 3000);
+            }
+
+            // 첫 알림은 5초 후
+            setTimeout(() => {
+                showNotification();
+            }, 5000);
+
+            // 이후 20초마다 반복
+            setInterval(() => {
+                showNotification();
+            }, 20000);
         })();
     </script>
 </body>
