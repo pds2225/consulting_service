@@ -1,0 +1,1392 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VALUE-UP - 중소기업 인증 전문가 컨설팅</title>
+    <!-- React 및 Babel 로드 -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        :root {
+            --color-primary: #2563eb;
+            --color-primary-dark: #1d4ed8;
+            --color-success: #22c55e;
+            --color-warning: #f59e0b;
+            --color-danger: #ef4444;
+            --color-text: #1e293b;
+            --color-text-secondary: #64748b;
+            --color-background: #f8fafc;
+            --color-surface: white;
+            --radius-md: 8px;
+            --radius-lg: 16px;
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+        
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6; 
+            color: var(--color-text); 
+            background: var(--color-background);
+            padding-top: 130px;
+        }
+        
+        .container { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 0 20px; 
+        }
+        
+        /* ========== 전략 1: 카운트다운 타이머 ========== */
+        .countdown-banner {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            color: white;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1001;
+            padding: 12px 0;
+            text-align: center;
+            font-weight: 700;
+            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+        }
+        
+        .countdown-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .countdown-timer {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.95rem;
+            font-weight: 700;
+        }
+        
+        .timer-number {
+            color: #ffeb3b;
+            font-size: 1.2rem;
+            font-weight: 900;
+        }
+        
+        /* ========== Header ========== */
+        header {
+            background: var(--color-surface);
+            box-shadow: var(--shadow-md);
+            position: fixed;
+            width: 100%;
+            top: 50px;
+            z-index: 1000;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--color-primary);
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--color-text-secondary);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--color-primary);
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--color-primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: var(--color-primary);
+            border: 2px solid var(--color-primary);
+        }
+        
+        .btn-secondary:hover {
+            background: #f0f4f8;
+        }
+        
+        /* ========== 전략 3: 실시간 신청 알림 ========== */
+        .notification-toast {
+            position: fixed;
+            bottom: 30px;
+            right: 20px;
+            background: white;
+            border-left: 4px solid var(--color-success);
+            padding: 16px 20px;
+            border-radius: 8px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            z-index: 900;
+            animation: slideIn 0.5s ease-out;
+            max-width: 300px;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        .notification-toast.remove {
+            animation: slideOut 0.5s ease-out;
+        }
+        
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+        }
+        
+        /* ========== Hero Section ========== */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 3rem 0 4rem;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+        
+        /* ========== 전략 2: 비교표 ========== */
+        .comparison-section {
+            background: var(--color-surface);
+            padding: 3rem 0;
+            margin: 3rem 0;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 2rem;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+        }
+        
+        .comparison-table thead {
+            background: #f0f4f8;
+        }
+        
+        .comparison-table th,
+        .comparison-table td {
+            padding: 16px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .comparison-table th {
+            font-weight: 700;
+            color: var(--color-text);
+        }
+        
+        .comparison-table td {
+            color: var(--color-text-secondary);
+        }
+        
+        .comparison-table tr:hover {
+            background: #f8fafc;
+        }
+        
+        .comparison-highlight {
+            background: #e0f2fe;
+            font-weight: 600;
+            color: var(--color-primary);
+        }
+        
+        .comparison-check {
+            color: var(--color-success);
+            font-weight: 700;
+        }
+        
+        .comparison-cross {
+            color: var(--color-danger);
+        }
+        
+        /* ========== 전략 4: 2단계 진단 ========== */
+        .diagnosis-section {
+            padding: 4rem 0;
+            background: var(--color-background);
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: var(--color-text);
+        }
+        
+        .section-subtitle {
+            text-align: center;
+            color: var(--color-text-secondary);
+            margin-bottom: 2rem;
+        }
+        
+        .diagnosis-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+        
+        .step-card {
+            background: white;
+            padding: 2rem;
+            border-radius: var(--radius-lg);
+            text-align: center;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s;
+        }
+        
+        .step-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+        }
+        
+        .step-number {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            background: var(--color-primary);
+            color: white;
+            border-radius: 50%;
+            line-height: 50px;
+            font-weight: 700;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .diagnosis-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            box-shadow: var(--shadow-md);
+        }
+        
+        /* ========== 전략 5: 강화된 후기 ========== */
+        .reviews-section {
+            padding: 4rem 0;
+            background: var(--color-surface);
+        }
+        
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .review-card {
+            background: #f8fafc;
+            padding: 2rem;
+            border-radius: var(--radius-lg);
+            border-left: 4px solid var(--color-success);
+        }
+        
+        .review-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .review-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--color-primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+        
+        .review-info h4 {
+            color: var(--color-text);
+            margin-bottom: 0.25rem;
+        }
+        
+        .review-meta {
+            font-size: 0.85rem;
+            color: var(--color-text-secondary);
+        }
+        
+        .review-stars {
+            color: #ffb800;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .review-content {
+            color: var(--color-text-secondary);
+            line-height: 1.8;
+        }
+        
+        .review-highlight {
+            color: var(--color-primary);
+            font-weight: 700;
+        }
+        
+        .review-date {
+            display: block;
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            color: #999;
+        }
+        
+        /* ========== 전략 8: FAQ ========== */
+        .faq-section {
+            padding: 4rem 0;
+            background: var(--color-background);
+        }
+        
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .faq-item {
+            background: white;
+            margin-bottom: 1rem;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+        }
+        
+        .faq-question {
+            padding: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: var(--color-text);
+            background: #f8fafc;
+            transition: all 0.3s;
+        }
+        
+        .faq-question:hover {
+            background: #f0f4f8;
+        }
+        
+        .faq-toggle {
+            transition: transform 0.3s;
+        }
+        
+        .faq-toggle.open {
+            transform: rotate(180deg);
+        }
+        
+        .faq-answer {
+            padding: 1.5rem;
+            color: var(--color-text-secondary);
+            line-height: 1.8;
+            display: none;
+        }
+        
+        .faq-answer.open {
+            display: block;
+        }
+        
+        /* ========== 전략 9: 추가 혜택 박스 ========== */
+        .bonus-section {
+            background: linear-gradient(135deg, #ffa500 0%, #ff8c00 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: var(--radius-lg);
+            margin: 2rem 0;
+            text-align: center;
+        }
+        
+        .bonus-section h3 {
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+        
+        .bonus-list {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        
+        .bonus-item {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 1rem;
+            border-radius: 8px;
+        }
+        
+        /* ========== 전략 6: Exit Intent 팝업 ========== */
+        .exit-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 2rem;
+            border-radius: var(--radius-lg);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            z-index: 1100;
+            max-width: 400px;
+            display: none;
+            animation: popupIn 0.3s ease-out;
+        }
+        
+        .exit-popup.show {
+            display: block;
+        }
+        
+        @keyframes popupIn {
+            from {
+                transform: translate(-50%, -50%) scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+        }
+        
+        .exit-popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1099;
+            display: none;
+        }
+        
+        .exit-popup-overlay.show {
+            display: block;
+        }
+        
+        .popup-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #999;
+        }
+        
+        /* ========== 전략 10: 모바일 스티키 CTA ========== */
+        #mobile-sticky-cta {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: white;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            z-index: 800;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .cta-buttons .btn {
+            flex: 1;
+            padding: 12px;
+            margin: 0;
+        }
+        
+        /* ========== 전략 10: 카카오톡 상담 버튼 ========== */
+        .kakao-float-btn {
+            position: fixed;
+            bottom: 120px;
+            right: 20px;
+            background: #FFE812;
+            color: #3c1e1e;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            text-decoration: none;
+            z-index: 700;
+            transition: all 0.3s;
+        }
+        
+        .kakao-float-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .kakao-float-label {
+            position: absolute;
+            right: 70px;
+            bottom: 10px;
+            background: #FFE812;
+            color: #3c1e1e;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            white-space: nowrap;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* ========== 가격 섹션 ========== */
+        .pricing-section {
+            padding: 4rem 0;
+            background: var(--color-surface);
+        }
+        
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .pricing-card {
+            background: #f8fafc;
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .pricing-card.featured {
+            border-color: var(--color-primary);
+            background: white;
+            box-shadow: 0 20px 40px rgba(37, 99, 235, 0.15);
+            transform: scale(1.05);
+        }
+        
+        .pricing-card h3 {
+            color: var(--color-text);
+            margin-bottom: 1rem;
+        }
+        
+        .price-tag {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--color-primary);
+            margin: 1rem 0;
+        }
+        
+        .price-original {
+            text-decoration: line-through;
+            color: #999;
+            font-size: 1rem;
+        }
+        
+        .price-split {
+            background: #fff3cd;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            color: #856404;
+            margin: 1rem 0;
+        }
+        
+        .pricing-features {
+            text-align: left;
+            margin: 1.5rem 0;
+            font-size: 0.95rem;
+        }
+        
+        .pricing-features li {
+            padding: 0.5rem 0;
+            color: var(--color-text-secondary);
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .pricing-card.featured {
+                transform: scale(1);
+            }
+            
+            #mobile-sticky-cta {
+                display: block;
+            }
+            
+            body {
+                padding-bottom: 70px;
+            }
+            
+            .kakao-float-btn {
+                bottom: 100px;
+            }
+            
+            .countdown-banner {
+                font-size: 0.9rem;
+            }
+            
+            .countdown-content {
+                gap: 10px;
+            }
+        }
+        
+        /* ========== 일반 스타일 ========== */
+        .btn-full {
+            width: 100%;
+            margin-top: 1rem;
+        }
+        
+        section {
+            margin: 0;
+        }
+        
+        footer {
+            background: #1B1B1E;
+            color: #ccc;
+            text-align: center;
+            padding: 40px 10px;
+            font-size: 0.9rem;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: var(--color-primary);
+            transition: width 0.3s;
+        }
+        
+        .question {
+            margin-bottom: 1.5rem;
+        }
+        
+        .question label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--color-text);
+        }
+        
+        .question select,
+        .question input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+        }
+        
+        .results {
+            background: white;
+            border-radius: var(--radius-md);
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .cert-card {
+            border-left: 4px solid var(--color-success);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: var(--shadow-md);
+            background: #f8f8ff;
+            border-radius: var(--radius-md);
+        }
+        
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: var(--color-primary);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: var(--radius-lg);
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+        }
+        
+        .close {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            color: #aaa;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useMemo, useCallback, useEffect } = React;
+
+        // 데이터 정의
+        const CERTIFICATIONS = [
+            { id: 'venture', name: '벤처기업 인증', price: 2900000, originalPrice: 6500000, timeline: '5~7일', benefits: '법인세 50% 감면, 정책자금 우대금리, 조달 가점 5점' },
+            { id: 'innobiz', name: '이노비즈 인증', price: 2900000, originalPrice: 6500000, timeline: '5~7일', benefits: '기술혁신형 중소기업 인정, 정책자금 금리 우대, 조달 가점 2점' },
+            { id: 'mainbiz', name: '메인비즈 인증', price: 1900000, originalPrice: 4000000, timeline: '3~5일', benefits: '주력산업 선도기업 인정, 정책자금 지원, 조달 가점 1점' },
+            { id: 'iso9001', name: 'ISO 9001 품질경영시스템', price: 700000, originalPrice: 1750000, timeline: '3~5일', benefits: '품질관리 시스템 구축, 대기업 납품 자격, 수출 경쟁력 강화' },
+        ];
+
+        const QUESTIONS = [
+            { id: 'industry', label: '1. 회사의 업종은 무엇인가요?', options: [{ v: 'manufacturing', l: '제조업' }, { v: 'it', l: 'IT/소프트웨어' }, { v: 'bio', l: '바이오/의료' }, { v: 'service', l: '서비스업' }, { v: 'other', l: '기타' }] },
+            { id: 'revenue', label: '2. 연간 매출 규모는?', options: [{ v: 'under-10', l: '10억 미만' }, { v: '10-50', l: '10~50억' }, { v: '50-100', l: '50~100억' }, { v: 'over-100', l: '100억 이상' }] },
+            { id: 'employees', label: '3. 종업원 수는?', options: [{ v: 'under-10', l: '10명 미만' }, { v: '10-30', l: '10~30명' }, { v: '30-100', l: '30~100명' }, { v: 'over-100', l: '100명 이상' }] },
+        ];
+
+        // 유효성 검증
+        const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        const validatePhone = (phone) => /^01[0-9]-?\d{3,4}-?\d{4}$/.test(phone);
+
+        // 카운트다운 타이머
+        const CountdownBanner = () => {
+            const [timeLeft, setTimeLeft] = useState({ days: 4, hours: 12, minutes: 30 });
+            const [slotLeft, setSlotLeft] = useState(23);
+
+            useEffect(() => {
+                const interval = setInterval(() => {
+                    setTimeLeft(prev => {
+                        let { days, hours, minutes } = prev;
+                        minutes--;
+                        if (minutes < 0) {
+                            minutes = 59;
+                            hours--;
+                            if (hours < 0) {
+                                hours = 23;
+                                days--;
+                            }
+                        }
+                        return { days, hours, minutes };
+                    });
+                }, 60000);
+                return () => clearInterval(interval);
+            }, []);
+
+            return (
+                <div className="countdown-banner">
+                    <div className="countdown-content">
+                        <span>🎁 이달 말까지 신청 시 최대 20만원 할인!</span>
+                        <div className="countdown-timer">
+                            ⏰ <span className="timer-number">{timeLeft.days}</span>일 <span className="timer-number">{timeLeft.hours}</span>시 <span className="timer-number">{timeLeft.minutes}</span>분 남음 | 남은 슬롯: <span className="timer-number">{slotLeft}</span>개
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // 실시간 신청 알림
+        const NotificationToast = ({ message, onClose }) => {
+            useEffect(() => {
+                const timer = setTimeout(onClose, 5000);
+                return () => clearTimeout(timer);
+            }, [onClose]);
+
+            return (
+                <div className="notification-toast">
+                    <strong>✅ {message}</strong>
+                </div>
+            );
+        };
+
+        // 비교표
+        const ComparisonTable = () => (
+            <div className="comparison-section">
+                <div className="container">
+                    <h2 className="section-title">💡 왜 VALUE-UP을 선택할까?</h2>
+                    <table className="comparison-table">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>일반 컨설팅 회사</th>
+                                <th className="comparison-highlight">VALUE-UP ✅</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>평균 비용</strong></td>
+                                <td>500~800만원</td>
+                                <td className="comparison-highlight"><strong>190~290만원</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>처리 기간</strong></td>
+                                <td>30~60일</td>
+                                <td className="comparison-highlight"><strong>3~7일</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>가격 투명성</strong></td>
+                                <td className="comparison-cross">❌ 별도 견적</td>
+                                <td className="comparison-check">✅ 정찰제 공개</td>
+                            </tr>
+                            <tr>
+                                <td><strong>사후관리</strong></td>
+                                <td className="comparison-cross">❌ 별도 계약</td>
+                                <td className="comparison-check">✅ 무료 포함</td>
+                            </tr>
+                            <tr>
+                                <td><strong>전문가 검수</strong></td>
+                                <td className="comparison-cross">❌ 단순 문서 작성</td>
+                                <td className="comparison-check">✅ 경영지도사 직접 수행</td>
+                            </tr>
+                            <tr>
+                                <td><strong>AI 진단</strong></td>
+                                <td className="comparison-cross">❌ 없음</td>
+                                <td className="comparison-check">✅ 3분 맞춤 분석</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        );
+
+        // 2단계 진단 프리뷰
+        const DiagnosisPreview = ({ openDiagnosis }) => (
+            <div className="diagnosis-section">
+                <div className="container">
+                    <h2 className="section-title">🧠 AI 진단으로 3분 안에 맞춤 추천</h2>
+                    <p className="section-subtitle">간단한 질문으로 귀사에 최적의 인증 전략을 받아보세요</p>
+                    
+                    <div className="diagnosis-steps">
+                        <div className="step-card">
+                            <div className="step-number">1</div>
+                            <h3>간단 진단</h3>
+                            <p>3가지 핵심 질문으로 2분 내 완료</p>
+                        </div>
+                        <div className="step-card">
+                            <div className="step-number">2</div>
+                            <h3>AI 분석</h3>
+                            <p>실시간 데이터로 맞춤 인증 추천</p>
+                        </div>
+                        <div className="step-card">
+                            <div className="step-number">3</div>
+                            <h3>상세 결과</h3>
+                            <p>예상 비용, 기간, 합격률 확인</p>
+                        </div>
+                    </div>
+
+                    <div className="diagnosis-container">
+                        <h3>🎯 진단 후 받을 수 있는 정보:</h3>
+                        <ul style={{listStyle: 'none', margin: '1rem 0'}}>
+                            <li style={{padding: '0.5rem 0'}}>✅ 귀사에 최적인 인증 3가지</li>
+                            <li style={{padding: '0.5rem 0'}}>✅ 예상 합격률 및 소요기간</li>
+                            <li style={{padding: '0.5rem 0'}}>✅ 받을 수 있는 정부 혜택 총액</li>
+                            <li style={{padding: '0.5rem 0'}}>✅ 맞춤형 신청 로드맵</li>
+                        </ul>
+                        <button className="btn btn-primary btn-full" onClick={openDiagnosis}>
+                            지금 무료 진단 시작
+                        </button>
+                    </div>
+                </div>
+            </div>
+        );
+
+        // 강화된 후기
+        const ReviewsSection = () => {
+            const reviews = [
+                {
+                    name: '김준호',
+                    company: '제조기업',
+                    rating: 5,
+                    text: '예상보다 3일 빨리 완료되었고, 450만원을 절감했습니다. 전문가 검토 덕분에 한 번에 합격했어요.',
+                    savings: '450만원',
+                    date: '2025년 10월 인증 완료'
+                },
+                {
+                    name: '이수정',
+                    company: 'IT 스타트업',
+                    rating: 5,
+                    text: '정찰제 가격에 프리미엄 수준의 컨설팅을 받았어요. 투자 유치 때 큰 도움이 되었습니다.',
+                    savings: '280만원',
+                    date: '2025년 9월 인증 완료'
+                },
+                {
+                    name: '박영준',
+                    company: 'ESG 인증 기업',
+                    rating: 5,
+                    text: '서류부터 심사까지 전담 관리받으니 심적으로도 편했습니다. 확실히 검증된 팀이에요.',
+                    savings: '320만원',
+                    date: '2025년 10월 인증 완료'
+                }
+            ];
+
+            return (
+                <div className="reviews-section">
+                    <div className="container">
+                        <h2 className="section-title">⭐ 실제 고객 후기</h2>
+                        <div className="reviews-grid">
+                            {reviews.map((review, idx) => (
+                                <div key={idx} className="review-card">
+                                    <div className="review-header">
+                                        <div className="review-avatar">{review.name.charAt(0)}</div>
+                                        <div className="review-info">
+                                            <h4>{review.name} 대표</h4>
+                                            <div className="review-meta">{review.company}</div>
+                                            <div className="review-stars">{'⭐'.repeat(review.rating)} {review.rating}.0</div>
+                                        </div>
+                                    </div>
+                                    <p className="review-content">
+                                        "{review.text}"
+                                    </p>
+                                    <p style={{marginTop: '1rem', fontSize: '0.95rem'}}>
+                                        💰 <span className="review-highlight">{review.savings}</span> 절감
+                                    </p>
+                                    <span className="review-date">✓ {review.date}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // FAQ 섹션
+        const FAQSection = () => {
+            const [openItems, setOpenItems] = useState({});
+
+            const faqs = [
+                {
+                    q: '정말 3~7일 안에 가능한가요?',
+                    a: '네, 서류 준비만 잘 되어 있다면 평균 5일 내 제출 완료됩니다. 다만, 서류 보완이 필요한 경우 추가 기간이 소요될 수 있습니다.'
+                },
+                {
+                    q: '합격 못하면 환불되나요?',
+                    a: '사전진단에서 적합 판정 시 90% 합격률을 보장하며, 만약 불합격 시 50% 환불 보장제를 운영합니다.'
+                },
+                {
+                    q: 'AI가 다 하는 건가요?',
+                    a: '아닙니다. AI는 초안 작성을 돕고, 최종 검수와 심사 대응은 경영지도사가 직접 수행합니다. 전문가의 검수 없이는 절대 제출하지 않습니다.'
+                },
+                {
+                    q: '여러 인증을 동시에 신청할 수 있나요?',
+                    a: '가능합니다. 벤처인증 + 이노비즈 같은 크로스 인증도 지원하며, 이 경우 패키지 할인을 받으실 수 있습니다.'
+                },
+                {
+                    q: '결과가 나온 후에는 어떻게 되나요?',
+                    a: '인증 획득 후 자동으로 갱신 알림, 재신청 할인, 추가 인증 추천까지 지속적으로 지원해드립니다.'
+                }
+            ];
+
+            const toggleFAQ = (id) => {
+                setOpenItems(prev => ({ ...prev, [id]: !prev[id] }));
+            };
+
+            return (
+                <div className="faq-section">
+                    <div className="container">
+                        <h2 className="section-title">❓ 자주 묻는 질문</h2>
+                        <div className="faq-container">
+                            {faqs.map((faq, idx) => (
+                                <div key={idx} className="faq-item">
+                                    <div className="faq-question" onClick={() => toggleFAQ(idx)}>
+                                        <span>{faq.q}</span>
+                                        <span className={`faq-toggle ${openItems[idx] ? 'open' : ''}`}>▼</span>
+                                    </div>
+                                    {openItems[idx] && (
+                                        <div className="faq-answer open">
+                                            {faq.a}
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // 가격 섹션
+        const PricingSection = ({ openModal }) => (
+            <div className="pricing-section">
+                <div className="container">
+                    <h2 className="section-title">💳 투명한 정찰제 가격</h2>
+                    <p className="section-subtitle">숨겨진 비용 없이, 온라인에서 바로 확인하세요</p>
+
+                    <div className="pricing-grid">
+                        {CERTIFICATIONS.map((cert, idx) => (
+                            <div key={idx} className={`pricing-card ${idx === 0 ? 'featured' : ''}`}>
+                                {idx === 0 && <div style={{color: 'var(--color-success)', fontWeight: 700, marginBottom: '0.5rem'}}>⭐ 가장 인기</div>}
+                                <h3>{cert.name}</h3>
+                                <div className="price-tag">
+                                    {(cert.price / 1000000).toFixed(2)}만원
+                                </div>
+                                <div className="price-original">시장가: {(cert.originalPrice / 1000000).toFixed(1)}만원</div>
+                                <div className="price-split">
+                                    💳 분할: 월 {Math.round(cert.price / 3 / 10000) * 10}만원 × 3개월
+                                </div>
+                                <ul className="pricing-features">
+                                    <li>✅ {cert.benefits.split(',')[0]}</li>
+                                    <li>✅ {cert.benefits.split(',')[1]}</li>
+                                    <li>✅ {cert.benefits.split(',')[2]}</li>
+                                    <li>⏱️ {cert.timeline}</li>
+                                </ul>
+                                <button className="btn btn-primary btn-full" onClick={() => openModal('apply-modal')}>
+                                    지금 신청하기
+                                </button>
+                            </div>
+                        ))}
+                    </div>
+
+                    <div className="bonus-section">
+                        <h3>🎁 지금 신청하시면 추가로 드려요!</h3>
+                        <ul className="bonus-list">
+                            <li className="bonus-item">📄 정부지원사업 매칭 리포트 (30만원 상당)</li>
+                            <li className="bonus-item">📊 인증 후 세무 컨설팅 1회 무료</li>
+                            <li className="bonus-item">🎟️ 2차 인증 20% 할인권</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        );
+
+        // Exit Intent 팝업
+        const ExitPopup = ({ show, onClose, onContinue }) => (
+            <>
+                <div className={`exit-popup-overlay ${show ? 'show' : ''}`} onClick={onClose}></div>
+                <div className={`exit-popup ${show ? 'show' : ''}`}>
+                    <span className="popup-close" onClick={onClose}>&times;</span>
+                    <h3 style={{color: 'var(--color-primary)', marginBottom: '1rem'}}>🎁 잠깐만요!</h3>
+                    <p style={{color: 'var(--color-text-secondary)', marginBottom: '1.5rem'}}>
+                        지금 무료 진단을 시작하시면 <strong style={{color: 'var(--color-danger)'}}>20만원 할인 쿠폰</strong>을 바로 드립니다!
+                    </p>
+                    <button className="btn btn-primary btn-full" onClick={onContinue}>
+                        무료 진단 받고 쿠폰 받기
+                    </button>
+                    <button className="btn btn-secondary btn-full" onClick={onClose} style={{marginTop: '0.5rem'}}>
+                        나중에 할게요
+                    </button>
+                </div>
+            </>
+        );
+
+        // 신청 폼
+        const ApplyForm = ({ closeModal }) => {
+            const [formData, setFormData] = useState({ company: '', name: '', phone: '', email: '', certification: 'venture' });
+            const [errors, setErrors] = useState({});
+
+            const handleChange = (e) => {
+                const { name, value } = e.target;
+                setFormData(prev => ({ ...prev, [name]: value }));
+                if (errors[name]) {
+                    setErrors(prev => ({ ...prev, [name]: '' }));
+                }
+            };
+
+            const handleSubmit = (e) => {
+                e.preventDefault();
+                const newErrors = {};
+                if (!formData.company.trim()) newErrors.company = '회사명을 입력해주세요';
+                if (!formData.name.trim()) newErrors.name = '담당자 성함을 입력해주세요';
+                if (!validatePhone(formData.phone)) newErrors.phone = '올바른 연락처를 입력해주세요';
+                if (!validateEmail(formData.email)) newErrors.email = '올바른 이메일을 입력해주세요';
+
+                if (Object.keys(newErrors).length > 0) {
+                    setErrors(newErrors);
+                    return;
+                }
+
+                alert('✅ 신청이 접수되었습니다! 담당자가 곧 연락드리겠습니다.');
+                closeModal();
+            };
+
+            return (
+                <form onSubmit={handleSubmit}>
+                    <div style={{marginBottom: '1rem'}}>
+                        <label>회사명 *</label>
+                        <input type="text" name="company" value={formData.company} onChange={handleChange} style={{width: '100%', padding: '0.75rem', marginTop: '0.5rem', border: `1px solid ${errors.company ? 'var(--color-danger)' : '#d1d5db'}`, borderRadius: '8px'}} />
+                        {errors.company && <div style={{color: 'var(--color-danger)', fontSize: '0.85rem', marginTop: '0.25rem'}}>{errors.company}</div>}
+                    </div>
+                    <div style={{marginBottom: '1rem'}}>
+                        <label>담당자 성함 *</label>
+                        <input type="text" name="name" value={formData.name} onChange={handleChange} style={{width: '100%', padding: '0.75rem', marginTop: '0.5rem', border: `1px solid ${errors.name ? 'var(--color-danger)' : '#d1d5db'}`, borderRadius: '8px'}} />
+                        {errors.name && <div style={{color: 'var(--color-danger)', fontSize: '0.85rem', marginTop: '0.25rem'}}>{errors.name}</div>}
+                    </div>
+                    <div style={{marginBottom: '1rem'}}>
+                        <label>연락처 (예: 010-1234-5678) *</label>
+                        <input type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder="010-1234-5678" style={{width: '100%', padding: '0.75rem', marginTop: '0.5rem', border: `1px solid ${errors.phone ? 'var(--color-danger)' : '#d1d5db'}`, borderRadius: '8px'}} />
+                        {errors.phone && <div style={{color: 'var(--color-danger)', fontSize: '0.85rem', marginTop: '0.25rem'}}>{errors.phone}</div>}
+                    </div>
+                    <div style={{marginBottom: '1rem'}}>
+                        <label>이메일 *</label>
+                        <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="example@company.com" style={{width: '100%', padding: '0.75rem', marginTop: '0.5rem', border: `1px solid ${errors.email ? 'var(--color-danger)' : '#d1d5db'}`, borderRadius: '8px'}} />
+                        {errors.email && <div style={{color: 'var(--color-danger)', fontSize: '0.85rem', marginTop: '0.25rem'}}>{errors.email}</div>}
+                    </div>
+                    <div style={{marginBottom: '1.5rem'}}>
+                        <label>희망 인증</label>
+                        <select name="certification" value={formData.certification} onChange={handleChange} style={{width: '100%', padding: '0.75rem', marginTop: '0.5rem', border: '1px solid #d1d5db', borderRadius: '8px'}}>
+                            <option value="venture">벤처기업 인증</option>
+                            <option value="innobiz">이노비즈 인증</option>
+                            <option value="mainbiz">메인비즈 인증</option>
+                            <option value="iso">ISO 9001</option>
+                        </select>
+                    </div>
+                    <button type="submit" className="btn btn-primary btn-full">신청 완료</button>
+                </form>
+            );
+        };
+
+        // 메인 앱
+        const App = () => {
+            const [activeModal, setActiveModal] = useState(null);
+            const [notification, setNotification] = useState(null);
+            const [showExitPopup, setShowExitPopup] = useState(false);
+
+            const openModal = useCallback((modalId) => {
+                setActiveModal(modalId);
+            }, []);
+
+            const closeModal = useCallback(() => {
+                setActiveModal(null);
+            }, []);
+
+            const scrollToSection = (sectionId) => {
+                const target = document.getElementById(sectionId);
+                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            };
+
+            // 실시간 신청 알림
+            useEffect(() => {
+                const notificationMessages = [
+                    '서울 OO기업이 방금 벤처인증을 신청했습니다',
+                    '경기 OO제조가 메인비즈 인증을 완료했습니다',
+                    '부산 OO바이오가 AI 진단을 시작했습니다',
+                    '인천 OO회사가 벤처인증 20만원 할인을 받았습니다'
+                ];
+
+                const interval = setInterval(() => {
+                    const msg = notificationMessages[Math.floor(Math.random() * notificationMessages.length)];
+                    setNotification(msg);
+                }, 12000);
+
+                return () => clearInterval(interval);
+            }, []);
+
+            // Exit Intent 처리
+            useEffect(() => {
+                const handleMouseLeave = (e) => {
+                    if (e.clientY < 50 && !showExitPopup) {
+                        setShowExitPopup(true);
+                    }
+                };
+                document.addEventListener('mouseleave', handleMouseLeave);
+                return () => document.removeEventListener('mouseleave', handleMouseLeave);
+            }, [showExitPopup]);
+
+            return (
+                <>
+                    <CountdownBanner />
+                    
+                    <header>
+                        <nav className="container">
+                            <div className="logo">VALUE-UP</div>
+                            <ul className="nav-links">
+                                <li><a href="#features">서비스</a></li>
+                                <li><a href="#pricing">가격</a></li>
+                                <li><a href="#faq">FAQ</a></li>
+                                <li><a href="#contact">문의</a></li>
+                            </ul>
+                            <button className="btn btn-primary" onClick={() => openModal('contact-modal')}>무료 상담</button>
+                        </nav>
+                    </header>
+
+                    <section className="hero">
+                        <div className="container">
+                            <h1>중소기업 인증, 전문가가 확실하게 끝냅니다</h1>
+                            <p>맞춤 진단부터 서류 작성, 심사 대응까지 — VALUE-UP 컨설턴트가 전담 관리합니다.</p>
+                            <button className="btn btn-primary hero-cta-btn" onClick={() => scrollToSection('diagnosis')}>
+                                🧠 무료 AI 진단 시작하기
+                            </button>
+                            <p style={{fontSize: '0.95rem', marginTop: '0.5rem', opacity: 0.9}}>3분 안에 맞춤 인증 추천 받기</p>
+
+                            <div className="hero-stats" style={{marginTop: '3rem'}}>
+                                <div><span style={{fontSize: '2.2rem', fontWeight: '900', display: 'block'}}>90%</span><span>성공률</span></div>
+                                <div><span style={{fontSize: '2.2rem', fontWeight: '900', display: 'block'}}>5일</span><span>평균 처리기간</span></div>
+                                <div><span style={{fontSize: '2.2rem', fontWeight: '900', display: 'block'}}>60%</span><span>비용 절감</span></div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <ComparisonTable />
+
+                    <DiagnosisPreview openDiagnosis={() => scrollToSection('diagnosis')} />
+
+                    <ReviewsSection />
+
+                    <div id="pricing"><PricingSection openModal={openModal} /></div>
+
+                    <div id="faq"><FAQSection /></div>
+
+                    <section style={{background: 'var(--color-surface)', padding: '3rem 0', textAlign: 'center'}}>
+                        <div className="container">
+                            <h2 style={{fontSize: '2rem', marginBottom: '1rem'}}>이제 인증이 쉬워집니다</h2>
+                            <p style={{color: 'var(--color-text-secondary)', marginBottom: '2rem'}}>투명한 가격, 빠른 처리, 확실한 결과 — VALUE-UP과 함께 시작하세요.</p>
+                            <button className="btn btn-primary" onClick={() => scrollToSection('diagnosis')} style={{padding: '1rem 2rem', fontSize: '1.1rem'}}>
+                                지금 무료 진단 받기
+                            </button>
+                        </div>
+                    </section>
+
+                    <footer id="contact">
+                        <p>&copy; 2025 VALUE-UP. 모든 인증 문제는 VALUE-UP이 책임집니다.</p>
+                    </footer>
+
+                    {notification && (
+                        <NotificationToast 
+                            message={notification} 
+                            onClose={() => setNotification(null)} 
+                        />
+                    )}
+
+                    <ExitPopup 
+                        show={showExitPopup} 
+                        onClose={() => setShowExitPopup(false)}
+                        onContinue={() => {
+                            setShowExitPopup(false);
+                            scrollToSection('diagnosis');
+                        }}
+                    />
+
+                    <div id="mobile-sticky-cta">
+                        <div className="cta-buttons">
+                            <button className="btn btn-primary" onClick={() => scrollToSection('diagnosis')}>
+                                🧠 무료 진단
+                            </button>
+                            <button className="btn btn-primary" onClick={() => openModal('contact-modal')}>
+                                💬 상담 신청
+                            </button>
+                        </div>
+                    </div>
+
+                    <a href="#" className="kakao-float-btn" onClick={(e) => { e.preventDefault(); alert('카카오톡 상담 채널로 이동합니다'); }}>
+                        💬
+                    </a>
+                    <div className="kakao-float-label">1분 응답</div>
+
+                    <div id="apply-modal" className={`modal ${activeModal === 'apply-modal' ? 'active' : ''}`} onClick={(e) => e.target.id === 'apply-modal' && closeModal()}>
+                        <div className="modal-content">
+                            <span className="close" onClick={closeModal}>&times;</span>
+                            <h2 style={{color: 'var(--color-primary)', marginBottom: '1.5rem'}}>🚀 인증 신청</h2>
+                            <ApplyForm closeModal={closeModal} />
+                        </div>
+                    </div>
+
+                    <div id="contact-modal" className={`modal ${activeModal === 'contact-modal' ? 'active' : ''}`} onClick={(e) => e.target.id === 'contact-modal' && closeModal()}>
+                        <div className="modal-content">
+                            <span className="close" onClick={closeModal}>&times;</span>
+                            <h2 style={{color: 'var(--color-primary)', marginBottom: '1rem'}}>💬 무료 상담</h2>
+                            <p style={{color: 'var(--color-text-secondary)', marginBottom: '1.5rem'}}>전문가가 1:1로 상담해드립니다</p>
+                            <ApplyForm closeModal={closeModal} />
+                        </div>
+                    </div>
+                </>
+            );
+        };
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>
