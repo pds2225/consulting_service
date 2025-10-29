@@ -1267,6 +1267,14 @@
 
             // Exit Intent 처리
             useEffect(() => {
+                // 팝업을 이미 본 경우 체크
+                const hasClosedPopup = sessionStorage.getItem('exitPopupClosed');
+                const hasAcceptedPopup = localStorage.getItem('exitPopupAccepted');
+
+                if (hasClosedPopup || hasAcceptedPopup) {
+                    return; // 팝업을 보지 않음
+                }
+
                 const handleMouseLeave = (e) => {
                     if (e.clientY < 50 && !showExitPopup) {
                         setShowExitPopup(true);
@@ -1341,11 +1349,15 @@
                         />
                     )}
 
-                    <ExitPopup 
-                        show={showExitPopup} 
-                        onClose={() => setShowExitPopup(false)}
+                    <ExitPopup
+                        show={showExitPopup}
+                        onClose={() => {
+                            setShowExitPopup(false);
+                            sessionStorage.setItem('exitPopupClosed', 'true');
+                        }}
                         onContinue={() => {
                             setShowExitPopup(false);
+                            localStorage.setItem('exitPopupAccepted', 'true');
                             scrollToSection('diagnosis');
                         }}
                     />
