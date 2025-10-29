@@ -1008,11 +1008,13 @@
             align-items: center;
             color: white;
             text-align: center;
+            flex-wrap: nowrap;
         }
 
         .promo-left, .promo-right {
             font-size: 1rem;
             font-weight: 600;
+            white-space: nowrap;
         }
 
         .promo-banner .highlight {
@@ -1022,15 +1024,6 @@
 
         /* Responsive */
         @media (max-width: 768px) {
-            .promo-content {
-                flex-direction: column;
-                gap: 10px;
-            }
-
-            .promo-left, .promo-right {
-                font-size: 0.9rem;
-            }
-
             .hero h1 {
                 font-size: 2rem;
             }
@@ -1050,6 +1043,17 @@
 
             .testimonial-grid {
                 grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .promo-content {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .promo-left, .promo-right {
+                font-size: 0.9rem;
             }
         }
     </style>
