@@ -1056,9 +1056,158 @@
                 font-size: 0.9rem;
             }
         }
+
+        /* Coupon Popup */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .popup-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .popup-content {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            transform: scale(0.8);
+            transition: transform 0.3s ease;
+        }
+
+        .popup-overlay.show .popup-content {
+            transform: scale(1);
+        }
+
+        .popup-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 28px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #999;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+
+        .popup-close:hover {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .popup-title {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .popup-message {
+            font-size: 1.1rem;
+            color: #666;
+            line-height: 1.8;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .popup-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .popup-btn {
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            text-align: center;
+        }
+
+        .popup-btn-primary {
+            background: #4A90E2;
+            color: white;
+        }
+
+        .popup-btn-primary:hover {
+            background: #3A7BC8;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(74, 144, 226, 0.3);
+        }
+
+        .popup-btn-secondary {
+            background: white;
+            color: #4A90E2;
+            border: 2px solid #4A90E2;
+        }
+
+        .popup-btn-secondary:hover {
+            background: #f8f9fa;
+        }
+
+        @media (max-width: 480px) {
+            .popup-content {
+                padding: 30px 20px;
+            }
+
+            .popup-title {
+                font-size: 1.5rem;
+            }
+
+            .popup-message {
+                font-size: 1rem;
+            }
+        }
     </style>
 </head>
 <body>
+    <!-- Coupon Popup -->
+    <div class="popup-overlay" id="couponPopup">
+        <div class="popup-content">
+            <button class="popup-close" id="closePopup">&times;</button>
+            <div class="popup-title">🎁 잠깐만요!</div>
+            <div class="popup-message">
+                지금 무료 진단을 시작하시면<br>
+                <strong>20만원 할인 쿠폰</strong>을 바로 드립니다!
+            </div>
+            <div class="popup-buttons">
+                <button class="popup-btn popup-btn-primary" id="getCoupon">
+                    무료 진단 받고 쿠폰 받기
+                </button>
+                <button class="popup-btn popup-btn-secondary" id="laterBtn">
+                    나중에 할게요
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Promo Banner -->
     <div class="promo-banner">
         <div class="promo-content">
@@ -1901,6 +2050,78 @@ ${result.recommendations.map(r => r.replace('💡 ', '')).join('\n')}
                 }
             });
         });
+
+        // Coupon Popup Logic
+        (function() {
+            const popup = document.getElementById('couponPopup');
+            const closeBtn = document.getElementById('closePopup');
+            const laterBtn = document.getElementById('laterBtn');
+            const getCouponBtn = document.getElementById('getCoupon');
+
+            // 팝업 표시 함수
+            function showPopup() {
+                setTimeout(() => {
+                    popup.classList.add('show');
+                }, 2000); // 2초 후 표시
+            }
+
+            // 팝업 숨김 함수
+            function hidePopup() {
+                popup.classList.remove('show');
+            }
+
+            // 팝업 표시 여부 확인
+            function shouldShowPopup() {
+                // localStorage에 쿠폰 받은 기록이 있으면 영구적으로 안 보임
+                if (localStorage.getItem('couponReceived') === 'true') {
+                    return false;
+                }
+                // sessionStorage에 닫은 기록이 있으면 세션 동안 안 보임
+                if (sessionStorage.getItem('popupClosed') === 'true') {
+                    return false;
+                }
+                return true;
+            }
+
+            // X 버튼 클릭 (세션 동안 안 보임)
+            closeBtn.addEventListener('click', () => {
+                hidePopup();
+                sessionStorage.setItem('popupClosed', 'true');
+            });
+
+            // 나중에 할게요 버튼 클릭 (세션 동안 안 보임)
+            laterBtn.addEventListener('click', () => {
+                hidePopup();
+                sessionStorage.setItem('popupClosed', 'true');
+            });
+
+            // 무료 진단 받고 쿠폰 받기 버튼 클릭 (영구적으로 안 보임)
+            getCouponBtn.addEventListener('click', () => {
+                hidePopup();
+                localStorage.setItem('couponReceived', 'true');
+                // 히어로 섹션으로 스크롤
+                const heroSection = document.querySelector('.hero');
+                if (heroSection) {
+                    heroSection.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+
+            // 오버레이 클릭 시 닫기 (세션 동안 안 보임)
+            popup.addEventListener('click', (e) => {
+                if (e.target === popup) {
+                    hidePopup();
+                    sessionStorage.setItem('popupClosed', 'true');
+                }
+            });
+
+            // 페이지 로드 시 팝업 표시 여부 확인
+            if (shouldShowPopup()) {
+                showPopup();
+            }
+        })();
     </script>
 </body>
 </html>
