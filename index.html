@@ -990,8 +990,47 @@
             opacity: 1;
         }
 
+        /* Promo Banner */
+        .promo-banner {
+            background: #FF6B7A;
+            width: 100%;
+            position: sticky;
+            top: 0;
+            z-index: 101;
+            padding: 15px 20px;
+        }
+
+        .promo-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            text-align: center;
+        }
+
+        .promo-left, .promo-right {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .promo-banner .highlight {
+            color: #FFD700;
+            font-weight: 700;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
+            .promo-content {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .promo-left, .promo-right {
+                font-size: 0.9rem;
+            }
+
             .hero h1 {
                 font-size: 2rem;
             }
@@ -1016,6 +1055,14 @@
     </style>
 </head>
 <body>
+    <!-- Promo Banner -->
+    <div class="promo-banner">
+        <div class="promo-content">
+            <span class="promo-left">🎁 이달 말까지 신청 시 최대 <span class="highlight">20만원</span> 할인!</span>
+            <span class="promo-right">⏰ <span class="highlight">4일 12시 30분</span> 남음 | 남은 슬롯: <span class="highlight">23개</span></span>
+        </div>
+    </div>
+
     <!-- Header -->
     <header>
         <nav class="container">
