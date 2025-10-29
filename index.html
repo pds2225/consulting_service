@@ -122,6 +122,14 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
 
+        /* 히어로 섹션 버튼 래퍼 */
+        .hero-buttons-wrapper {
+            display: flex;
+            flex-direction: row; /* 데스크탑: 가로 배치 */
+            justify-content: center;
+            gap: 20px; /* 데스크탑: 버튼 사이 간격 20px */
+        }
+
         .hero-secondary {
             background: transparent;
             color: white;
@@ -1037,6 +1045,18 @@
                 align-items: center;
             }
 
+            .hero-buttons-wrapper {
+                flex-direction: column; /* 모바일: 세로 배치 */
+                gap: 10px; /* 모바일: 버튼 사이 간격 10px */
+                align-items: center; /* 세로 중앙 정렬 */
+            }
+
+            .hero-cta {
+                /* 모바일에서 버튼 너비를 적절히 조정 (기존 스타일을 덮어쓸 수 있음) */
+                width: 80%;
+                max-width: 350px;
+            }
+
             .nav-links {
                 display: none;
             }
@@ -1301,9 +1321,9 @@
         <div class="container">
             <h1>중소기업 인증, AI가 추천하고<br>자동화로 해결합니다</h1>
             <p>정부·ESG 인증을 3일 만에, 정찰제 가격으로</p>
-            <div class="hero-buttons">
-                <a href="#simulator" class="hero-cta">AI 인증 진단 시작하기</a>
-                <a href="#pricing" class="hero-secondary">가격 확인하기</a>
+            <div class="hero-buttons-wrapper">
+                <a href="#ai" class="hero-cta">🔮 무료 진단</a>
+                <a href="#consult" class="hero-cta">💬 상담 신청</a>
             </div>
         </div>
     </section>
