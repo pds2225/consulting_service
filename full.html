@@ -1017,6 +1017,25 @@
                 flex-direction: column;
             }
         }
+
+        /* --- VALUE-UP의 전문 분야 (신규 추가: 2×2 그리드, 1열≤768px) --- */
+        section#vu-expertise { background:#fff; border:1px solid #e6e8ee; border-radius:10px; padding:18px; margin:24px 0; }
+        .vx-head { margin-bottom:10px; }
+        .vx-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:20px; }
+        .vx-card { background:#fff; border:1px solid #e6e8ee; border-radius:10px; padding:25px 15px; box-shadow:0 4px 12px rgba(0,0,0,0.05); transition:transform .16s ease, box-shadow .16s ease; }
+        .vx-card:hover { transform:translateY(-4px); box-shadow:0 10px 24px rgba(0,0,0,0.12); }
+        .vx-row { display:flex; align-items:flex-start; gap:14px; }
+        .vx-icon { font-size:2.5rem; line-height:1; width:2.5rem; text-align:center; }
+        .vx-title { font-weight:700; font-size:17px; margin:0 0 6px; }
+        .vx-list { list-style:none; margin:0; padding:0; }
+        .vx-list li { font-size:0.9rem; line-height:1.5; color:#2b2f36; margin:2px 0; }
+        @media (max-width:768px){
+          .vx-grid { grid-template-columns:1fr; gap:20px; }
+        }
+        @media print{
+          section#vu-expertise { break-inside:avoid; page-break-inside:avoid; }
+          .vx-card { box-shadow:none; }
+        }
     </style>
 </head>
 <body>
@@ -1626,6 +1645,75 @@
                     </section>
 
                     <ComparisonTable />
+
+                    <section id="vu-expertise" aria-labelledby="vu-expertise-title">
+                      <div className="vx-head">
+                        <h2 id="vu-expertise-title">VALUE-UP의 전문 분야</h2>
+                        <p className="lead">4가지 핵심 영역의 검증된 경험</p>
+                      </div>
+
+                      <div className="vx-grid">
+                        {/* 카드 1: 공공기관 사업 */}
+                        <article className="vx-card" aria-labelledby="vx-card-public-title">
+                          <div className="vx-row">
+                            <span className="vx-icon" aria-hidden="true">🏛️</span>
+                            <div className="vx-text">
+                              <h3 className="vx-title" id="vx-card-public-title">정부기관 프로젝트 수행</h3>
+                              <ul className="vx-list">
+                                <li>지자체, 공공기관과의 협력 경험</li>
+                                <li>정부지원사업 현장 컨설팅</li>
+                                <li>공공기관 전략수립 프로젝트</li>
+                              </ul>
+                            </div>
+                          </div>
+                        </article>
+
+                        {/* 카드 2: 스타트업 지원 */}
+                        <article className="vx-card" aria-labelledby="vx-card-startup-title">
+                          <div className="vx-row">
+                            <span className="vx-icon" aria-hidden="true">🚀</span>
+                            <div className="vx-text">
+                              <h3 className="vx-title" id="vx-card-startup-title">스타트업 투자유치</h3>
+                              <ul className="vx-list">
+                                <li>건설분야 AI 기업 IR자료 제작</li>
+                                <li>교육서비스 기업 투자유치 컨설팅</li>
+                                <li>초기기업 IR전략 및 투자자 매칭</li>
+                              </ul>
+                            </div>
+                          </div>
+                        </article>
+
+                        {/* 카드 3: 경영 전략 */}
+                        <article className="vx-card" aria-labelledby="vx-card-strategy-title">
+                          <div className="vx-row">
+                            <span className="vx-icon" aria-hidden="true">💡</span>
+                            <div className="vx-text">
+                              <h3 className="vx-title" id="vx-card-strategy-title">경영전략 수립</h3>
+                              <ul className="vx-list">
+                                <li>ESG 경영전략 수립</li>
+                                <li>중장기 경영계획 컨설팅</li>
+                                <li>공공기관 지속가능경영 체계 구축</li>
+                              </ul>
+                            </div>
+                          </div>
+                        </article>
+
+                        {/* 카드 4: 전문 자격 */}
+                        <article className="vx-card" aria-labelledby="vx-card-cred-title">
+                          <div className="vx-row">
+                            <span className="vx-icon" aria-hidden="true">📜</span>
+                            <div className="vx-text">
+                              <h3 className="vx-title" id="vx-card-cred-title">창업기관 평가위원 자격</h3>
+                              <ul className="vx-list">
+                                <li>국가공인 경영지도사 자격</li>
+                                <li>창업기관 심사역 및 평가위원</li>
+                                <li>한국경영기술지도사회 중부 이사</li>
+                              </ul>
+                            </div>
+                          </div>
+                        </article>
+                      </div>
+                    </section>
 
                     <DiagnosisPreview openDiagnosis={() => scrollToSection('diagnosis')} />
 
